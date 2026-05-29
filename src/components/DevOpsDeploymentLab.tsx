@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { AlertTriangle, CheckCircle2, Cloud, Code2, Container, Copy, GitBranch, GitCommit, Globe2, KeyRound, Play, Rocket, Server, ShieldCheck, WalletCards } from 'lucide-react';
+import ProjectControlQALab from './ProjectControlQALab';
+import { AlertTriangle, CheckCircle2, Cloud, Container, Copy, GitBranch, Globe2, Rocket, Server, ShieldCheck, WalletCards, ClipboardCheck } from 'lucide-react';
 
-type LabKey = 'workflow' | 'cicd' | 'docker' | 'cloudrun' | 'firebase' | 'cost' | 'troubleshoot';
+type LabKey = 'workflow' | 'cicd' | 'docker' | 'cloudrun' | 'firebase' | 'cost' | 'troubleshoot' | 'project_qa';
 
 type LabItem = {
   id: LabKey;
@@ -19,7 +20,8 @@ const labs: LabItem[] = [
   { id: 'cloudrun', order: '04', title: 'Google Cloud Run Lab', subtitle: 'Service, revision, trigger, env vars', icon: Cloud, badge: 'CLOUD' },
   { id: 'firebase', order: '05', title: 'Firebase Hosting Lab', subtitle: 'Hosting, rewrite, domain, SSL', icon: Globe2, badge: 'FIREBASE' },
   { id: 'cost', order: '06', title: 'Cost Control Lab', subtitle: 'Min 0, max 1, billing alert, quota', icon: WalletCards, badge: 'COST' },
-  { id: 'troubleshoot', order: '07', title: 'Troubleshooting Playbook', subtitle: 'Nhìn lỗi build/runtime và xử lý nhanh', icon: AlertTriangle, badge: 'FIX' }
+  { id: 'troubleshoot', order: '07', title: 'Troubleshooting Playbook', subtitle: 'Nhìn lỗi build/runtime và xử lý nhanh', icon: AlertTriangle, badge: 'FIX' },
+  { id: 'project_qa', order: '08', title: 'Project Control & QA Lab', subtitle: 'AI PM, nghiệm thu, QA, release, rollback', icon: ClipboardCheck, badge: 'QA' }
 ];
 
 const codeSamples: Record<string, string> = {
@@ -57,6 +59,10 @@ export default function DevOpsDeploymentLab() {
   const [activeLab, setActiveLab] = useState<LabKey>('workflow');
   const current = labs.find(lab => lab.id === activeLab) ?? labs[0];
   const Icon = current.icon;
+
+  if (activeLab === 'project_qa') {
+    return <ProjectControlQALab />;
+  }
 
   return (
     <div className="space-y-6 text-slate-100 select-text pb-12">
@@ -165,7 +171,7 @@ function FirebaseLab() {
 
 function CostControlLab() {
   const checklist = ['Minimum instances = 0', 'Maximum instances = 1 lúc thử nghiệm', 'Request-based billing', 'Tạo Billing Alert', 'Không public API key ở frontend', 'Giới hạn/quản lý Gemini API key', 'Xem logs khi request tăng bất thường'];
-  return <div className="space-y-4"><Panel title="Checklist khóa chi phí" tone="emerald"><ul className="space-y-2">{checklist.map(item => <li key={item} className="flex gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />{item}</li>)}</ul></Panel><Panel title="Nguyên tắc ngân sách thấp" tone="amber">Không bật min instances > 0 khi chưa cần. Không tăng max instances nếu web chỉ là dashboard học tập. Không để key AI bị gọi không kiểm soát.</Panel></div>;
+  return <div className="space-y-4"><Panel title="Checklist khóa chi phí" tone="emerald"><ul className="space-y-2">{checklist.map(item => <li key={item} className="flex gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />{item}</li>)}</ul></Panel><Panel title="Nguyên tắc ngân sách thấp" tone="amber">Không bật min instances &gt; 0 khi chưa cần. Không tăng max instances nếu web chỉ là dashboard học tập. Không để key AI bị gọi không kiểm soát.</Panel></div>;
 }
 
 function TroubleshootingPlaybook() {
