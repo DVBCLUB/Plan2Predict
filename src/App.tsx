@@ -10,6 +10,7 @@ import GameAndMLWorkbench from './components/GameAndMLWorkbench';
 import AccountingKnowledgeHub from './components/AccountingKnowledgeHub';
 import AdvancedMLLab from './components/AdvancedMLLab';
 import InteractiveSimulatorHub from './components/InteractiveSimulatorHub';
+import DevOpsDeploymentLab from './components/DevOpsDeploymentLab';
 import {
   Briefcase,
   Calendar,
@@ -24,7 +25,8 @@ import {
   Gamepad2,
   BookOpen,
   Brain,
-  Wrench
+  Wrench,
+  Rocket
 } from 'lucide-react';
 
 type SegmentKey =
@@ -38,7 +40,8 @@ type SegmentKey =
   | 'game_ml'
   | 'accounting_knowledge'
   | 'advanced_ml'
-  | 'interactive_simulators';
+  | 'interactive_simulators'
+  | 'devops_deployment';
 
 type NavItem = {
   id: SegmentKey;
@@ -62,6 +65,7 @@ const navItems: NavItem[] = [
   { id: 'accounting_knowledge', order: '9', shortLabel: 'VAS · Tax', label: 'Kho Kiến Thức Kế Toán · Thuế · Audit', icon: BookOpen, badge: 'Hub', badgeClassName: 'bg-blue-500/15 text-blue-400 border-blue-500/25' },
   { id: 'advanced_ml', order: '10', shortLabel: 'ML Lab', label: 'Advanced Machine Learning Lab', icon: Brain, badge: 'Pro', badgeClassName: 'bg-purple-500/15 text-purple-400 border-purple-500/25' },
   { id: 'interactive_simulators', order: '11', shortLabel: 'Tools', label: 'Interactive Tools & Simulators', icon: Wrench, badge: 'Tools', badgeClassName: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25' },
+  { id: 'devops_deployment', order: '12', shortLabel: 'DevOps', label: 'DevOps & Cloud Deployment Lab', icon: Rocket, badge: 'Cloud', badgeClassName: 'bg-sky-500/15 text-sky-400 border-sky-500/25' },
 ];
 
 export default function App() {
@@ -98,6 +102,8 @@ export default function App() {
         return <AdvancedMLLab />;
       case 'interactive_simulators':
         return <InteractiveSimulatorHub />;
+      case 'devops_deployment':
+        return <DevOpsDeploymentLab />;
       default:
         return <SoloFounderBusiness />;
     }
@@ -156,11 +162,11 @@ export default function App() {
                     <span className="px-2 py-0.5 bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[9px] font-black rounded font-mono">SANDBOX SIMULATOR</span>
                   </h4>
                   <p className="text-xs text-slate-400 mt-1 leading-relaxed max-w-4xl font-medium">
-                    Hệ thống hoạt động như một <strong>Sổ tay thực chiến và Sân chơi thiết kế dữ liệu lớn</strong>. Đây không phải là phần mềm kế toán thuế thương mại, mà là dashboard học tập để mô phỏng VAS/IFRS, thuế, kiểm toán dữ liệu, AI và Machine Learning.
+                    Hệ thống hoạt động như một <strong>Sổ tay thực chiến và Sân chơi thiết kế dữ liệu lớn</strong>. Đây không phải là phần mềm kế toán thuế thương mại, mà là dashboard học tập để mô phỏng VAS/IFRS, thuế, kiểm toán dữ liệu, AI, DevOps và Machine Learning.
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2 shrink-0 w-full md:w-auto mt-1 md:mt-0">
+              <div className="flex gap-2 shrink-0 w-full md:w-auto mt-1 md:mt-0 flex-wrap">
                 <button
                   onClick={() => setActiveSegment('accounting_knowledge')}
                   className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-[11px] rounded-xl transition-all shadow-md shadow-blue-500/10 uppercase tracking-widest text-center flex-1 md:flex-initial"
@@ -178,6 +184,12 @@ export default function App() {
                   className="px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-[11px] rounded-xl transition-all shadow-md shadow-emerald-500/10 uppercase tracking-widest text-center flex-1 md:flex-initial"
                 >
                   Mở Tools
+                </button>
+                <button
+                  onClick={() => setActiveSegment('devops_deployment')}
+                  className="px-4 py-2.5 bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-500 hover:to-cyan-500 text-white font-black text-[11px] rounded-xl transition-all shadow-md shadow-sky-500/10 uppercase tracking-widest text-center flex-1 md:flex-initial"
+                >
+                  Mở DevOps
                 </button>
               </div>
             </div>
@@ -250,7 +262,7 @@ export default function App() {
                 <span>Hướng dẫn học tập nhanh:</span>
               </div>
               <p className="text-[11px] leading-relaxed font-semibold">
-                Dùng các thẻ bên trái để học theo từng phòng lab. Các module mới gồm <strong className="text-blue-400">Kho kiến thức kế toán</strong>, <strong className="text-purple-400">Advanced ML Lab</strong> và <strong className="text-emerald-400">Interactive Tools</strong>, giữ nguyên cấu trúc dashboard hiện tại.
+                Dùng các thẻ bên trái để học theo từng phòng lab. Các module mới gồm <strong className="text-blue-400">Kho kiến thức kế toán</strong>, <strong className="text-purple-400">Advanced ML Lab</strong>, <strong className="text-emerald-400">Interactive Tools</strong> và <strong className="text-sky-400">DevOps Cloud Lab</strong>, giữ nguyên cấu trúc dashboard hiện tại.
               </p>
             </div>
           </section>
