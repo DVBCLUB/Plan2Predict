@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { AlertTriangle, Bot, Bug, CheckCircle2, ClipboardCheck, FileCheck2, KeyRound, ListChecks, LockKeyhole, RotateCcw, ShieldCheck, Target, TestTube2 } from 'lucide-react';
+import SystemMapSandbox from './SystemMapSandbox';
+import { Bot, Bug, CheckCircle2, ClipboardCheck, FileCheck2, KeyRound, ListChecks, LockKeyhole, Map, RotateCcw, ShieldCheck, Target, TestTube2 } from 'lucide-react';
 
-type TabKey = 'ai_team' | 'acceptance' | 'qa_matrix' | 'bug_triage' | 'release' | 'rollback' | 'risk_register' | 'security_governance' | 'roadmap_backlog';
+type TabKey = 'ai_team' | 'acceptance' | 'qa_matrix' | 'bug_triage' | 'release' | 'rollback' | 'risk_register' | 'security_governance' | 'roadmap_backlog' | 'system_map';
 
 type TabItem = {
   id: TabKey;
@@ -21,7 +22,8 @@ const tabs: TabItem[] = [
   { id: 'rollback', order: '06', title: 'Rollback Plan', subtitle: 'Khi web lỗi thì quay lại bản ổn định', icon: RotateCcw, badge: 'SAFE' },
   { id: 'risk_register', order: '07', title: 'Risk Register', subtitle: 'Sổ rủi ro dự án cho người không chuyên code', icon: ShieldCheck, badge: 'RISK' },
   { id: 'security_governance', order: '08', title: 'Security & Data Governance', subtitle: 'API key, dữ liệu mẫu, quyền truy cập, audit trail', icon: LockKeyhole, badge: 'SEC' },
-  { id: 'roadmap_backlog', order: '09', title: 'Roadmap & Backlog Planner', subtitle: 'Lộ trình phát triển theo phase, ưu tiên và tiêu chí xong', icon: ListChecks, badge: 'PLAN' }
+  { id: 'roadmap_backlog', order: '09', title: 'Roadmap & Backlog Planner', subtitle: 'Lộ trình phát triển theo phase, ưu tiên và tiêu chí xong', icon: ListChecks, badge: 'PLAN' },
+  { id: 'system_map', order: '10', title: 'System Map / About Sandbox', subtitle: 'Bản đồ tổng thể dự án cho người mới', icon: Map, badge: 'MAP' }
 ];
 
 const aiAssignments = [
@@ -35,6 +37,10 @@ export default function ProjectControlQALab() {
   const [activeTab, setActiveTab] = useState<TabKey>('ai_team');
   const current = tabs.find(tab => tab.id === activeTab) ?? tabs[0];
   const Icon = current.icon;
+
+  if (activeTab === 'system_map') {
+    return <SystemMapSandbox />;
+  }
 
   return (
     <div className="space-y-6 text-slate-100 select-text pb-12">
@@ -124,12 +130,7 @@ function SecurityGovernance() {
 
 function RoadmapBacklog() {
   const [focus, setFocus] = useState('tools');
-  const roadmap = {
-    tools: ['Mở rộng Expense Checker theo ngành xây dựng', 'Thêm Journal Simulator có nhập số tiền/VAT', 'Thêm xuất checklist dạng markdown để copy'],
-    accounting: ['Bổ sung VAS 21/24/25', 'Thêm case IFRS 15 cho hợp đồng xây dựng', 'Tạo bảng đối chiếu kế toán-thuế cho từng khoản chi'],
-    ml: ['Thêm SHAP/feature importance mô phỏng', 'Thêm model drift monitor', 'Thêm mini dataset mẫu để chạy fraud scoring'],
-    devops: ['Thêm build status checklist', 'Thêm release note generator', 'Thêm hướng dẫn custom domain Firebase/Cloud Run']
-  } as const;
+  const roadmap = { tools: ['Mở rộng Expense Checker theo ngành xây dựng', 'Thêm Journal Simulator có nhập số tiền/VAT', 'Thêm xuất checklist dạng markdown để copy'], accounting: ['Bổ sung VAS 21/24/25', 'Thêm case IFRS 15 cho hợp đồng xây dựng', 'Tạo bảng đối chiếu kế toán-thuế cho từng khoản chi'], ml: ['Thêm SHAP/feature importance mô phỏng', 'Thêm model drift monitor', 'Thêm mini dataset mẫu để chạy fraud scoring'], devops: ['Thêm build status checklist', 'Thêm release note generator', 'Thêm hướng dẫn custom domain Firebase/Cloud Run'] } as const;
   const items = roadmap[focus as keyof typeof roadmap];
   return <div className="space-y-4"><Panel title="Roadmap nguyên tắc" tone="amber">Ưu tiên module có thể bấm thử, học được ngay, không phá layout. Mỗi phase chỉ nên sửa 1-2 component và có tiêu chí nghiệm thu rõ.</Panel><div><label className="text-[10px] text-slate-500 font-black uppercase">Nhóm ưu tiên</label><select value={focus} onChange={e => setFocus(e.target.value)} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-2.5 text-xs"><option value="tools">Interactive Tools</option><option value="accounting">Accounting Knowledge</option><option value="ml">Advanced ML</option><option value="devops">DevOps / Cloud</option></select></div><Panel title="Backlog đề xuất tiếp theo" tone="emerald"><ul className="space-y-2">{items.map(item => <li key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />{item}</li>)}</ul></Panel><Table headers={['Tiêu chí Done', 'Mô tả']} rows={[['Build pass', 'Cloud Run build không lỗi'], ['UI không vỡ', 'Desktop/mobile vẫn xem được'], ['Có dữ liệu mẫu', 'Người học bấm thử ngay không cần nhập quá nhiều'], ['Không lộ secret', 'Không có API key hoặc dữ liệu thật trong code'], ['Có rollback', 'Biết commit/revision để quay lại nếu lỗi']]} /></div>;
 }
