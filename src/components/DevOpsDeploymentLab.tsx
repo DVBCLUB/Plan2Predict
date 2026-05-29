@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import ProjectControlQALab from './ProjectControlQALab';
-import { AlertTriangle, CheckCircle2, Cloud, Container, Copy, GitBranch, Globe2, Rocket, Server, ShieldCheck, WalletCards, ClipboardCheck } from 'lucide-react';
+import ReleaseNotesGenerator from './ReleaseNotesGenerator';
+import { AlertTriangle, CheckCircle2, Cloud, Container, Copy, FileText, GitBranch, Globe2, Rocket, Server, ShieldCheck, WalletCards, ClipboardCheck } from 'lucide-react';
 
-type LabKey = 'workflow' | 'cicd' | 'docker' | 'cloudrun' | 'firebase' | 'cost' | 'troubleshoot' | 'project_qa';
+type LabKey = 'workflow' | 'cicd' | 'docker' | 'cloudrun' | 'firebase' | 'cost' | 'troubleshoot' | 'project_qa' | 'release_notes';
 
 type LabItem = {
   id: LabKey;
@@ -21,7 +22,8 @@ const labs: LabItem[] = [
   { id: 'firebase', order: '05', title: 'Firebase Hosting Lab', subtitle: 'Hosting, rewrite, domain, SSL', icon: Globe2, badge: 'FIREBASE' },
   { id: 'cost', order: '06', title: 'Cost Control Lab', subtitle: 'Min 0, max 1, billing alert, quota', icon: WalletCards, badge: 'COST' },
   { id: 'troubleshoot', order: '07', title: 'Troubleshooting Playbook', subtitle: 'Nhìn lỗi build/runtime và xử lý nhanh', icon: AlertTriangle, badge: 'FIX' },
-  { id: 'project_qa', order: '08', title: 'Project Control & QA Lab', subtitle: 'AI PM, nghiệm thu, QA, release, rollback', icon: ClipboardCheck, badge: 'QA' }
+  { id: 'project_qa', order: '08', title: 'Project Control & QA Lab', subtitle: 'AI PM, nghiệm thu, QA, release, rollback', icon: ClipboardCheck, badge: 'QA' },
+  { id: 'release_notes', order: '09', title: 'Release Notes Generator', subtitle: 'Tạo ghi chú release sau mỗi lần AI sửa code', icon: FileText, badge: 'NOTE' }
 ];
 
 const codeSamples: Record<string, string> = {
@@ -62,6 +64,10 @@ export default function DevOpsDeploymentLab() {
 
   if (activeLab === 'project_qa') {
     return <ProjectControlQALab />;
+  }
+
+  if (activeLab === 'release_notes') {
+    return <ReleaseNotesGenerator />;
   }
 
   return (
