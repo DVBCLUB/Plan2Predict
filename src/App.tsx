@@ -7,43 +7,101 @@ import GeminiPlayground from './components/GeminiPlayground';
 import CustomDataWorkbench from './components/CustomDataWorkbench';
 import AIEcosystemArchitecture from './components/AIEcosystemArchitecture';
 import GameAndMLWorkbench from './components/GameAndMLWorkbench';
-import { 
-  Briefcase, 
-  Calendar, 
-  Database, 
-  Terminal, 
-  Cpu, 
-  Sparkles, 
-  HelpCircle, 
-  CheckCircle2, 
-  ChevronRight, 
-  TrendingUp, 
-  FileText,
+import AccountingKnowledgeHub from './components/AccountingKnowledgeHub';
+import AdvancedMLLab from './components/AdvancedMLLab';
+import {
+  Briefcase,
+  Calendar,
+  Database,
+  Terminal,
+  Cpu,
+  HelpCircle,
+  ChevronRight,
   Compass,
-  LayoutDashboard,
   Layers,
   Network,
-  Gamepad2
+  Gamepad2,
+  BookOpen,
+  Brain
 } from 'lucide-react';
 
-export default function App() {
-  const [activeSegment, setActiveSegment] = useState<'founder' | 'roadmap' | 'datascience' | 'prompts' | 'assistant' | 'custom_data' | 'architecture' | 'game_ml'>('founder');
+type SegmentKey =
+  | 'founder'
+  | 'roadmap'
+  | 'datascience'
+  | 'prompts'
+  | 'assistant'
+  | 'custom_data'
+  | 'architecture'
+  | 'game_ml'
+  | 'accounting_knowledge'
+  | 'advanced_ml';
 
-  // Simple quick summary stats representing Vietnam Solo Opportunities
+type NavItem = {
+  id: SegmentKey;
+  order: string;
+  shortLabel: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge?: string;
+  badgeClassName?: string;
+};
+
+const navItems: NavItem[] = [
+  { id: 'founder', order: '1', shortLabel: 'Cơ Hội', label: 'Cơ Hội Solo Founder & Tài Chính', icon: Briefcase },
+  { id: 'roadmap', order: '2', shortLabel: 'Lộ Trình', label: 'Tuần Tự A-Z Web Roadmap', icon: Calendar },
+  { id: 'datascience', order: '3', shortLabel: 'Data Science', label: 'Đa Ngành Data Science & DS', icon: Database },
+  { id: 'prompts', order: '4', shortLabel: 'Prompts', label: 'Bộ Kỹ Sư Prompt Chuyên Sâu', icon: Terminal },
+  { id: 'assistant', order: '5', shortLabel: 'AI Trợ Lý', label: 'Trợ Lý AI Gemini Chatbot', icon: Cpu },
+  { id: 'custom_data', order: '6', shortLabel: 'Sandbox', label: 'Không Gian Dữ Liệu Tự Do', icon: Layers, badge: 'Active', badgeClassName: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25' },
+  { id: 'architecture', order: '7', shortLabel: 'Sơ đồ AI', label: 'Sơ đồ AI & Quy trình thực hiện', icon: Network },
+  { id: 'game_ml', order: '8', shortLabel: 'Game & ML', label: 'Game Mobile & ML Labs', icon: Gamepad2, badge: 'New', badgeClassName: 'bg-sky-500/15 text-sky-400 border-sky-500/25' },
+  { id: 'accounting_knowledge', order: '9', shortLabel: 'VAS · Tax', label: 'Kho Kiến Thức Kế Toán · Thuế · Audit', icon: BookOpen, badge: 'Hub', badgeClassName: 'bg-blue-500/15 text-blue-400 border-blue-500/25' },
+  { id: 'advanced_ml', order: '10', shortLabel: 'ML Lab', label: 'Advanced Machine Learning Lab', icon: Brain, badge: 'Pro', badgeClassName: 'bg-purple-500/15 text-purple-400 border-purple-500/25' },
+];
+
+export default function App() {
+  const [activeSegment, setActiveSegment] = useState<SegmentKey>('founder');
+
   const stats = [
-    { label: "Quy mô DNNVV VN (SMEs)", value: "98%", desc: "DNNVV chiếm lĩnh thị trường", color: "text-blue-400" },
-    { label: "Mức MRR Solo kỳ vọng", value: "35M - 120M+ VND", desc: "Từ 10 - 20 khách hàng duy trì", color: "text-emerald-400" },
-    { label: "Biên lợi nhuận gộp", value: "70% - 90%", desc: "Mô hình sản phẩm hóa tối ưu", color: "text-purple-400" },
-    { label: "Onboarding tối ưu", value: "< 10 ngày", desc: "Đưa giải pháp dữ liệu vào chạy thật", color: "text-amber-400" }
+    { label: 'Quy mô DNNVV VN (SMEs)', value: '98%', desc: 'DNNVV chiếm lĩnh thị trường', color: 'text-blue-400' },
+    { label: 'Mức MRR Solo kỳ vọng', value: '35M - 120M+ VND', desc: 'Từ 10 - 20 khách hàng duy trì', color: 'text-emerald-400' },
+    { label: 'Biên lợi nhuận gộp', value: '70% - 90%', desc: 'Mô hình sản phẩm hóa tối ưu', color: 'text-purple-400' },
+    { label: 'Onboarding tối ưu', value: '< 10 ngày', desc: 'Đưa giải pháp dữ liệu vào chạy thật', color: 'text-amber-400' }
   ];
+
+  const renderWorkspace = () => {
+    switch (activeSegment) {
+      case 'founder':
+        return <SoloFounderBusiness />;
+      case 'roadmap':
+        return <WebAccountingRoadmap />;
+      case 'datascience':
+        return <DataScienceEngineering />;
+      case 'prompts':
+        return <PromptPlayground />;
+      case 'assistant':
+        return <GeminiPlayground />;
+      case 'custom_data':
+        return <CustomDataWorkbench />;
+      case 'architecture':
+        return <AIEcosystemArchitecture />;
+      case 'game_ml':
+        return <GameAndMLWorkbench />;
+      case 'accounting_knowledge':
+        return <AccountingKnowledgeHub />;
+      case 'advanced_ml':
+        return <AdvancedMLLab />;
+      default:
+        return <SoloFounderBusiness />;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#03060c] font-sans antialiased text-slate-100 flex flex-col justify-between select-none">
-      {/* GRID ACCENTS */}
-      <div className="absolute inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-10%,rgba(139,92,246,0.06),transparent_60%)] bg-size-[48px_48px] before:content-[''] before:absolute before:inset-0 before:bg-[linear-gradient(rgba(255,255,255,0.012)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.012)_1px,transparent_1px)] before:bg-[size:32px_32px]"></div>
+      <div className="absolute inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-10%,rgba(139,92,246,0.06),transparent_60%)] bg-size-[48px_48px] before:content-[''] before:absolute before:inset-0 before:bg-[linear-gradient(rgba(255,255,255,0.012)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.012)_1px,transparent_1px)] before:bg-[size:32px_32px]" />
 
       <div className="relative z-10">
-        {/* HEADER BRANDING */}
         <header className="border-b border-slate-900 bg-[#060b13]/60 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3 select-text">
@@ -53,21 +111,19 @@ export default function App() {
               <div>
                 <h1 className="text-lg font-black tracking-tight text-white flex items-center gap-2">
                   LedgerFlow Studio
-                  <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-900 text-purple-400 border border-slate-800 rounded-full font-mono">REAL-TIME WORKBENCH v4_V26</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-900 text-purple-400 border border-slate-800 rounded-full font-mono">REAL-TIME WORKBENCH v5_LAB</span>
                 </h1>
-                <p className="text-slate-400 text-xs font-semibold">Hệ Thống Thực Chiến Kế Toán, Phân Tích Dữ Liệu Lớn & Sổ Sách Tùy Biến cho SME Việt Nam</p>
+                <p className="text-slate-400 text-xs font-semibold">Web học tập · Dashboard · Sandbox mô phỏng kế toán, dữ liệu lớn, AI & Machine Learning cho SME Việt Nam</p>
               </div>
             </div>
 
-            {/* Platform status indicator - architectural honesty, clear and clean */}
             <div className="flex items-center gap-2.5 bg-slate-950 border border-slate-900 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Workspace Local Mode (WAL ready)</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Workspace Sandbox Mode · GitHub Ready</span>
             </div>
           </div>
         </header>
 
-        {/* STATS OVERVIEW */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 select-text">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {stats.map((stat, i) => (
@@ -80,11 +136,9 @@ export default function App() {
           </div>
         </div>
 
-        {/* INTERACTIVE STUDY DISCLAIMER & MAP */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
           <div className="bg-gradient-to-r from-purple-950/20 via-[#0a0f1d] to-indigo-950/25 border border-purple-900/40 rounded-2xl p-5 relative overflow-hidden">
-            <div className="absolute right-0 top-0 -mt-6 -mr-6 w-32 h-32 rounded-full bg-purple-500/5 blur-2xl"></div>
-            
+            <div className="absolute right-0 top-0 -mt-6 -mr-6 w-32 h-32 rounded-full bg-purple-500/5 blur-2xl" />
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 mt-0.5">
@@ -96,288 +150,108 @@ export default function App() {
                     <span className="px-2 py-0.5 bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[9px] font-black rounded font-mono">SANDBOX SIMULATOR</span>
                   </h4>
                   <p className="text-xs text-slate-400 mt-1 leading-relaxed max-w-4xl font-medium">
-                    Hệ thống hoạt động như một <strong>Sổ tay thực chiến và Sân chơi (Sandbox) thiết kế dữ liệu lớn</strong>. Đây không phải là phần mềm ghi chép kế toán thuế thương mại. Hãy sử dụng các công cụ biên dịch DDL tự động, Pipeline dọn dẹp Pandas và mô hình AI để học sâu về kỹ nghệ phân tích báo cáo tài chính/kiểm toán tối ưu!
+                    Hệ thống hoạt động như một <strong>Sổ tay thực chiến và Sân chơi thiết kế dữ liệu lớn</strong>. Đây không phải là phần mềm kế toán thuế thương mại, mà là dashboard học tập để mô phỏng VAS/IFRS, thuế, kiểm toán dữ liệu, AI và Machine Learning.
                   </p>
                 </div>
               </div>
               <div className="flex gap-2 shrink-0 w-full md:w-auto mt-1 md:mt-0">
-                <button 
-                  onClick={() => setActiveSegment('custom_data')}
-                  className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-[11px] rounded-xl transition-all shadow-md shadow-purple-500/10 uppercase tracking-widest text-center flex-1 md:flex-initial"
+                <button
+                  onClick={() => setActiveSegment('accounting_knowledge')}
+                  className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-[11px] rounded-xl transition-all shadow-md shadow-blue-500/10 uppercase tracking-widest text-center flex-1 md:flex-initial"
                 >
-                  Trải Nghiệm Sandbox
+                  Mở Kho Kiến Thức
+                </button>
+                <button
+                  onClick={() => setActiveSegment('advanced_ml')}
+                  className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-black text-[11px] rounded-xl transition-all shadow-md shadow-purple-500/10 uppercase tracking-widest text-center flex-1 md:flex-initial"
+                >
+                  Mở ML Lab
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* MOBILE NAVIGATION PILLS */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 block lg:hidden">
           <div className="bg-[#050911]/80 backdrop-blur-md p-2.5 rounded-2xl border border-slate-900/60 shadow-xl shadow-purple-500/5">
             <span className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider block mb-2 px-1 text-left">
               Chuyển Tác Vụ Nhanh (Trượt ngang để xem hết)
             </span>
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1 select-none">
-              <button
-                onClick={() => setActiveSegment('founder')}
-                className={`py-2 px-3.5 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
-                  activeSegment === 'founder'
-                    ? 'bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-transparent hover:bg-slate-905'
-                }`}
-              >
-                <Briefcase className="w-3.5 h-3.5 shrink-0" />
-                <span>1. Cơ Hội</span>
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('roadmap')}
-                className={`py-2 px-3.5 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
-                  activeSegment === 'roadmap'
-                    ? 'bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-transparent hover:bg-slate-905'
-                }`}
-              >
-                <Calendar className="w-3.5 h-3.5 shrink-0" />
-                <span>2. Lộ Trình</span>
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('datascience')}
-                className={`py-2 px-3.5 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
-                  activeSegment === 'datascience'
-                    ? 'bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-transparent hover:bg-slate-905'
-                }`}
-              >
-                <Database className="w-3.5 h-3.5 shrink-0" />
-                <span>3. Data Science</span>
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('prompts')}
-                className={`py-2 px-3.5 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
-                  activeSegment === 'prompts'
-                    ? 'bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-transparent hover:bg-slate-905'
-                }`}
-              >
-                <Terminal className="w-3.5 h-3.5 shrink-0" />
-                <span>4. Prompts</span>
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('assistant')}
-                className={`py-2 px-3.5 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
-                  activeSegment === 'assistant'
-                    ? 'bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-transparent hover:bg-slate-905'
-                }`}
-              >
-                <Cpu className="w-3.5 h-3.5 shrink-0" />
-                <span>5. AI Trợ Lý</span>
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('custom_data')}
-                className={`py-2 px-3.5 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
-                  activeSegment === 'custom_data'
-                    ? 'bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-transparent hover:bg-slate-905'
-                }`}
-              >
-                <Layers className="w-3.5 h-3.5 shrink-0" />
-                <span>6. Sandbox</span>
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('architecture')}
-                className={`py-2 px-3.5 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
-                  activeSegment === 'architecture'
-                    ? 'bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-transparent hover:bg-slate-905'
-                }`}
-              >
-                <Network className="w-3.5 h-3.5 shrink-0 text-purple-400" />
-                <span>7. Sơ đồ AI & Quy trình</span>
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('game_ml')}
-                className={`py-2 px-3.5 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
-                  activeSegment === 'game_ml'
-                    ? 'bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-transparent hover:bg-slate-905'
-                }`}
-              >
-                <Gamepad2 className="w-3.5 h-3.5 shrink-0 text-sky-400" />
-                <span>8. Game Mobile & ML Labs</span>
-              </button>
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveSegment(item.id)}
+                    className={`py-2 px-3.5 rounded-xl text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 border ${
+                      activeSegment === item.id
+                        ? 'bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-500/10'
+                        : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-transparent hover:bg-slate-905'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                    <span>{item.order}. {item.shortLabel}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
 
-        {/* CORE CONTAINER */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid lg:grid-cols-4 gap-8">
-          {/* NAVIGATION SIDEBAR */}
           <section className="hidden lg:block lg:col-span-1 space-y-4">
             <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-905 space-y-1">
               <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-3 px-2">Bục điều khiển tác vụ</span>
-              
-              <button
-                onClick={() => setActiveSegment('founder')}
-                className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
-                  activeSegment === 'founder'
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-950'
-                }`}
-              >
-                <span className="flex items-center gap-2.5">
-                  <Briefcase className="w-4 h-4 text-purple-400" />
-                  <span>1. Cơ Hội Solo Founder & Tài Chính</span>
-                </span>
-                <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
 
-              <button
-                onClick={() => setActiveSegment('roadmap')}
-                className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
-                  activeSegment === 'roadmap'
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-950'
-                }`}
-              >
-                <span className="flex items-center gap-2.5">
-                  <Calendar className="w-4 h-4 text-purple-400" />
-                  <span>2. Tuần Tự A-Z Web Roadmap</span>
-                </span>
-                <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('datascience')}
-                className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
-                  activeSegment === 'datascience'
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-950'
-                }`}
-              >
-                <span className="flex items-center gap-2.5">
-                  <Database className="w-4 h-4 text-purple-400" />
-                  <span>3. Đa Ngành Data Science & DS</span>
-                </span>
-                <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('prompts')}
-                className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
-                  activeSegment === 'prompts'
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-950'
-                }`}
-              >
-                <span className="flex items-center gap-2.5">
-                  <Terminal className="w-4 h-4 text-purple-400" />
-                  <span>4. Bộ Kỹ Sư Prompt Chuyên Sâu</span>
-                </span>
-                <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('assistant')}
-                className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
-                  activeSegment === 'assistant'
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-950'
-                }`}
-              >
-                <span className="flex items-center gap-2.5">
-                  <Cpu className="w-4 h-4 text-purple-400" />
-                  <span>5. Trợ Lý AI Gemini Chatbot</span>
-                </span>
-                <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('custom_data')}
-                className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
-                  activeSegment === 'custom_data'
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-950'
-                }`}
-              >
-                <span className="flex items-center gap-2.5">
-                  <Layers className="w-4 h-4 text-purple-400" />
-                  <span>6. Không Gian Dữ Liệu Tự Do</span>
-                </span>
-                <span className="bg-emerald-500/15 text-emerald-400 text-[9px] font-black px-1.5 py-0.5 rounded border border-emerald-500/25 uppercase font-mono leading-none tracking-tight">Active</span>
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('architecture')}
-                className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
-                  activeSegment === 'architecture'
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-950'
-                }`}
-              >
-                <span className="flex items-center gap-2.5">
-                  <Network className="w-4 h-4 text-purple-400" />
-                  <span>7. Sơ đồ AI & Quy trình thực hiện</span>
-                </span>
-                <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
-
-              <button
-                onClick={() => setActiveSegment('game_ml')}
-                className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
-                  activeSegment === 'game_ml'
-                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/10'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-950'
-                }`}
-              >
-                <span className="flex items-center gap-2.5">
-                  <Gamepad2 className="w-4 h-4 text-sky-405" />
-                  <span>8. Game Mobile & ML Labs</span>
-                </span>
-                <span className="bg-sky-500/15 text-sky-400 text-[9px] font-black px-1.5 py-0.5 rounded border border-sky-500/25 uppercase font-mono leading-none tracking-tight">New</span>
-              </button>
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveSegment(item.id)}
+                    className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
+                      activeSegment === item.id
+                        ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/10'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-950'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Icon className="w-4 h-4 text-purple-400" />
+                      <span>{item.order}. {item.label}</span>
+                    </span>
+                    {item.badge ? (
+                      <span className={`text-[9px] font-black px-1.5 py-0.5 rounded border uppercase font-mono leading-none tracking-tight ${item.badgeClassName}`}>
+                        {item.badge}
+                      </span>
+                    ) : (
+                      <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
-            {/* Helpful quick guide box */}
             <div className="bg-slate-950/65 p-4 rounded-xl border border-slate-900 text-xs text-slate-400 space-y-2.5">
               <div className="flex items-center gap-2 text-purple-400 font-bold">
                 <Compass className="w-4 h-4 shrink-0" />
                 <span>Hướng dẫn học tập nhanh:</span>
               </div>
               <p className="text-[11px] leading-relaxed font-semibold">
-                Sử dụng các thẻ bên trái để tuần tự học tập sâu. 
-                <br /><br />
-                Đặc biệt thẻ <strong className="text-purple-450">Sơ đồ AI & Quy trình</strong> giúp hình dung kết nối vận hành vẹn toàn của 1 Solo Founder!
+                Dùng các thẻ bên trái để học theo từng phòng lab. Hai khu mới được thêm vào là <strong className="text-blue-400">Kho kiến thức kế toán</strong> và <strong className="text-purple-400">Advanced ML Lab</strong>, giữ nguyên cấu trúc dashboard hiện tại.
               </p>
             </div>
           </section>
 
-          {/* ACTIVE WORKSPACE AREA */}
           <section className="lg:col-span-3 space-y-6">
-            {activeSegment === 'founder' && <SoloFounderBusiness />}
-            {activeSegment === 'roadmap' && <WebAccountingRoadmap />}
-            {activeSegment === 'datascience' && <DataScienceEngineering />}
-            {activeSegment === 'prompts' && <PromptPlayground />}
-            {activeSegment === 'assistant' && <GeminiPlayground />}
-            {activeSegment === 'custom_data' && <CustomDataWorkbench />}
-            {activeSegment === 'architecture' && <AIEcosystemArchitecture />}
-            {activeSegment === 'game_ml' && <GameAndMLWorkbench />}
+            {renderWorkspace()}
           </section>
         </main>
       </div>
 
-      {/* FOOTER */}
       <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-600 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p>© 2026 LedgerFlow Studio Việt Nam. Toàn bộ giải pháp, lộ trình A-Z vàStar Schema quản trị thuộc bản quyền vẹn toàn.</p>
+          <p>© 2026 LedgerFlow Studio Việt Nam. Sandbox học tập, dashboard mô phỏng và phòng lab dữ liệu/AI.</p>
         </div>
       </footer>
     </div>
