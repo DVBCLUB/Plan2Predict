@@ -18,7 +18,7 @@ function getGeminiClient(): GoogleGenAI {
       apiKey: key,
       httpOptions: {
         headers: {
-          'User-Agent': 'aistudio-build',
+          'User-Agent': 'ledgerflow-studio-sandbox',
         }
       }
     });
@@ -28,33 +28,32 @@ function getGeminiClient(): GoogleGenAI {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
+  const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
-  app.use(express.json());
+  app.use(express.json({ limit: "1mb" }));
 
-  // API endpoints FIRST
-  app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", time: new Date() });
+  app.get("/api/health", (_req, res) => {
+    res.json({ status: "ok", time: new Date(), model: GEMINI_MODEL });
   });
 
   app.post("/api/gemini/generate", async (req, res) => {
     try {
       const { prompt, systemInstruction } = req.body;
-      if (!prompt) {
+      if (!prompt || typeof prompt !== "string") {
         return res.status(400).json({ error: "Prompt is required." });
       }
 
-      // Check if API key is present
       if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === "MY_GEMINI_API_KEY") {
-        return res.status(400).json({ 
-          error: "GEMINI_API_KEY is missing. Please configure it in your secrets panel.",
-          isMissingKey: true 
+        return res.status(400).json({
+          error: "GEMINI_API_KEY is missing. Please configure it in your environment variables.",
+          isMissingKey: true
         });
       }
 
       const ai = getGeminiClient();
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: GEMINI_MODEL,
         contents: prompt,
         config: systemInstruction ? { systemInstruction } : undefined
       });
@@ -66,7 +65,6 @@ async function startServer() {
     }
   });
 
-  // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
@@ -74,10 +72,10 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
+    const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+    app.get("*", (_req, res) => {
+      res.sendFile(path.join(distPath, "index.html"));
     });
   }
 
