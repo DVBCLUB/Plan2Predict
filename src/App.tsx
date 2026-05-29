@@ -9,6 +9,7 @@ import AIEcosystemArchitecture from './components/AIEcosystemArchitecture';
 import GameAndMLWorkbench from './components/GameAndMLWorkbench';
 import AccountingKnowledgeHub from './components/AccountingKnowledgeHub';
 import AdvancedMLLab from './components/AdvancedMLLab';
+import InteractiveSimulatorHub from './components/InteractiveSimulatorHub';
 import {
   Briefcase,
   Calendar,
@@ -22,7 +23,8 @@ import {
   Network,
   Gamepad2,
   BookOpen,
-  Brain
+  Brain,
+  Wrench
 } from 'lucide-react';
 
 type SegmentKey =
@@ -35,7 +37,8 @@ type SegmentKey =
   | 'architecture'
   | 'game_ml'
   | 'accounting_knowledge'
-  | 'advanced_ml';
+  | 'advanced_ml'
+  | 'interactive_simulators';
 
 type NavItem = {
   id: SegmentKey;
@@ -58,6 +61,7 @@ const navItems: NavItem[] = [
   { id: 'game_ml', order: '8', shortLabel: 'Game & ML', label: 'Game Mobile & ML Labs', icon: Gamepad2, badge: 'New', badgeClassName: 'bg-sky-500/15 text-sky-400 border-sky-500/25' },
   { id: 'accounting_knowledge', order: '9', shortLabel: 'VAS · Tax', label: 'Kho Kiến Thức Kế Toán · Thuế · Audit', icon: BookOpen, badge: 'Hub', badgeClassName: 'bg-blue-500/15 text-blue-400 border-blue-500/25' },
   { id: 'advanced_ml', order: '10', shortLabel: 'ML Lab', label: 'Advanced Machine Learning Lab', icon: Brain, badge: 'Pro', badgeClassName: 'bg-purple-500/15 text-purple-400 border-purple-500/25' },
+  { id: 'interactive_simulators', order: '11', shortLabel: 'Tools', label: 'Interactive Tools & Simulators', icon: Wrench, badge: 'Tools', badgeClassName: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25' },
 ];
 
 export default function App() {
@@ -92,6 +96,8 @@ export default function App() {
         return <AccountingKnowledgeHub />;
       case 'advanced_ml':
         return <AdvancedMLLab />;
+      case 'interactive_simulators':
+        return <InteractiveSimulatorHub />;
       default:
         return <SoloFounderBusiness />;
     }
@@ -167,6 +173,12 @@ export default function App() {
                 >
                   Mở ML Lab
                 </button>
+                <button
+                  onClick={() => setActiveSegment('interactive_simulators')}
+                  className="px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-[11px] rounded-xl transition-all shadow-md shadow-emerald-500/10 uppercase tracking-widest text-center flex-1 md:flex-initial"
+                >
+                  Mở Tools
+                </button>
               </div>
             </div>
           </div>
@@ -238,7 +250,7 @@ export default function App() {
                 <span>Hướng dẫn học tập nhanh:</span>
               </div>
               <p className="text-[11px] leading-relaxed font-semibold">
-                Dùng các thẻ bên trái để học theo từng phòng lab. Hai khu mới được thêm vào là <strong className="text-blue-400">Kho kiến thức kế toán</strong> và <strong className="text-purple-400">Advanced ML Lab</strong>, giữ nguyên cấu trúc dashboard hiện tại.
+                Dùng các thẻ bên trái để học theo từng phòng lab. Các module mới gồm <strong className="text-blue-400">Kho kiến thức kế toán</strong>, <strong className="text-purple-400">Advanced ML Lab</strong> và <strong className="text-emerald-400">Interactive Tools</strong>, giữ nguyên cấu trúc dashboard hiện tại.
               </p>
             </div>
           </section>
