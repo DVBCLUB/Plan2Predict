@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { AlertTriangle, Bot, Bug, CheckCircle2, ClipboardCheck, FileCheck2, KeyRound, ListChecks, LockKeyhole, RotateCcw, ShieldCheck, Target, TestTube2 } from 'lucide-react';
 
-type TabKey = 'ai_team' | 'acceptance' | 'qa_matrix' | 'bug_triage' | 'release' | 'rollback' | 'risk_register' | 'security_governance';
+type TabKey = 'ai_team' | 'acceptance' | 'qa_matrix' | 'bug_triage' | 'release' | 'rollback' | 'risk_register' | 'security_governance' | 'roadmap_backlog';
 
 type TabItem = {
   id: TabKey;
@@ -20,7 +20,8 @@ const tabs: TabItem[] = [
   { id: 'release', order: '05', title: 'Release Checklist', subtitle: 'Trước khi push/deploy phải kiểm tra gì', icon: FileCheck2, badge: 'REL' },
   { id: 'rollback', order: '06', title: 'Rollback Plan', subtitle: 'Khi web lỗi thì quay lại bản ổn định', icon: RotateCcw, badge: 'SAFE' },
   { id: 'risk_register', order: '07', title: 'Risk Register', subtitle: 'Sổ rủi ro dự án cho người không chuyên code', icon: ShieldCheck, badge: 'RISK' },
-  { id: 'security_governance', order: '08', title: 'Security & Data Governance', subtitle: 'API key, dữ liệu mẫu, quyền truy cập, audit trail', icon: LockKeyhole, badge: 'SEC' }
+  { id: 'security_governance', order: '08', title: 'Security & Data Governance', subtitle: 'API key, dữ liệu mẫu, quyền truy cập, audit trail', icon: LockKeyhole, badge: 'SEC' },
+  { id: 'roadmap_backlog', order: '09', title: 'Roadmap & Backlog Planner', subtitle: 'Lộ trình phát triển theo phase, ưu tiên và tiêu chí xong', icon: ListChecks, badge: 'PLAN' }
 ];
 
 const aiAssignments = [
@@ -43,7 +44,7 @@ export default function ProjectControlQALab() {
           <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0"><ClipboardCheck className="w-6 h-6" /></div>
           <div>
             <h1 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">✅ Project Control & QA Lab <span className="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/25 text-[9px] font-black rounded font-mono">AI PM · QA · RELEASE · SECURITY</span></h1>
-            <p className="text-xs text-slate-400 mt-1 font-semibold leading-relaxed max-w-4xl">Phòng lab dành cho người quản lý dự án không chuyên code: giao việc cho AI, nghiệm thu tính năng, test build, phân loại lỗi, release, rollback và kiểm soát bảo mật dữ liệu.</p>
+            <p className="text-xs text-slate-400 mt-1 font-semibold leading-relaxed max-w-4xl">Phòng lab dành cho người quản lý dự án không chuyên code: giao việc cho AI, nghiệm thu tính năng, test build, phân loại lỗi, release, rollback, backlog và kiểm soát bảo mật dữ liệu.</p>
           </div>
         </div>
       </section>
@@ -66,6 +67,7 @@ export default function ProjectControlQALab() {
           {activeTab === 'rollback' && <RollbackPlan />}
           {activeTab === 'risk_register' && <RiskRegister />}
           {activeTab === 'security_governance' && <SecurityGovernance />}
+          {activeTab === 'roadmap_backlog' && <RoadmapBacklog />}
         </main>
       </div>
     </div>
@@ -118,6 +120,18 @@ function RiskRegister() {
 function SecurityGovernance() {
   const rows = [['API key', 'Chỉ lưu ở Cloud Run env vars/secrets, không để trong frontend hay README'], ['Dữ liệu học tập', 'Dùng dữ liệu giả/masked data, không upload chứng từ thật nếu chưa có chính sách'], ['Quyền GitHub', 'Không cấp quyền write cho người không cần; dùng branch/PR nếu làm việc nhóm'], ['Audit trail', 'Mọi thay đổi phải qua commit, có message và người thực hiện'], ['Prompt AI', 'Không paste mật khẩu, API key, dữ liệu khách hàng, số tài khoản ngân hàng thật'], ['Public web', 'Chỉ public nội dung học tập; API nhạy cảm phải có kiểm soát request']];
   return <div className="space-y-4"><Panel title="Security baseline cho Plan2Predict" tone="sky">Vì đây là web học tập public, nguyên tắc là không đưa dữ liệu thật và không để secret ở phía trình duyệt. AI chỉ nên dùng để phân tích dữ liệu mẫu hoặc dữ liệu đã ẩn danh.</Panel><Table headers={['Mảng', 'Nguyên tắc kiểm soát']} rows={rows.map(row => [row[0], row[1]])} /><Panel title="Checklist trước khi đưa dữ liệu vào sandbox" tone="amber"><ul className="space-y-2"><li className="flex gap-2"><KeyRound className="w-4 h-4 text-amber-400 shrink-0" />Xóa tên khách hàng, MST, số tài khoản, địa chỉ, số điện thoại nếu không cần.</li><li className="flex gap-2"><LockKeyhole className="w-4 h-4 text-amber-400 shrink-0" />Không đưa API key vào prompt hoặc file upload.</li><li className="flex gap-2"><ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />Chỉ dùng dữ liệu giả cho demo public.</li></ul></Panel></div>;
+}
+
+function RoadmapBacklog() {
+  const [focus, setFocus] = useState('tools');
+  const roadmap = {
+    tools: ['Mở rộng Expense Checker theo ngành xây dựng', 'Thêm Journal Simulator có nhập số tiền/VAT', 'Thêm xuất checklist dạng markdown để copy'],
+    accounting: ['Bổ sung VAS 21/24/25', 'Thêm case IFRS 15 cho hợp đồng xây dựng', 'Tạo bảng đối chiếu kế toán-thuế cho từng khoản chi'],
+    ml: ['Thêm SHAP/feature importance mô phỏng', 'Thêm model drift monitor', 'Thêm mini dataset mẫu để chạy fraud scoring'],
+    devops: ['Thêm build status checklist', 'Thêm release note generator', 'Thêm hướng dẫn custom domain Firebase/Cloud Run']
+  } as const;
+  const items = roadmap[focus as keyof typeof roadmap];
+  return <div className="space-y-4"><Panel title="Roadmap nguyên tắc" tone="amber">Ưu tiên module có thể bấm thử, học được ngay, không phá layout. Mỗi phase chỉ nên sửa 1-2 component và có tiêu chí nghiệm thu rõ.</Panel><div><label className="text-[10px] text-slate-500 font-black uppercase">Nhóm ưu tiên</label><select value={focus} onChange={e => setFocus(e.target.value)} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-2.5 text-xs"><option value="tools">Interactive Tools</option><option value="accounting">Accounting Knowledge</option><option value="ml">Advanced ML</option><option value="devops">DevOps / Cloud</option></select></div><Panel title="Backlog đề xuất tiếp theo" tone="emerald"><ul className="space-y-2">{items.map(item => <li key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />{item}</li>)}</ul></Panel><Table headers={['Tiêu chí Done', 'Mô tả']} rows={[['Build pass', 'Cloud Run build không lỗi'], ['UI không vỡ', 'Desktop/mobile vẫn xem được'], ['Có dữ liệu mẫu', 'Người học bấm thử ngay không cần nhập quá nhiều'], ['Không lộ secret', 'Không có API key hoặc dữ liệu thật trong code'], ['Có rollback', 'Biết commit/revision để quay lại nếu lỗi']]} /></div>;
 }
 
 function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
