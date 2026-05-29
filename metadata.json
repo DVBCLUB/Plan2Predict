@@ -1,0 +1,6 @@
+{
+  "name": "LedgerFlow Studio",
+  "description": "Hệ thống thực chiến kế toán, phân tích dữ liệu lớn và thiết kế mô hình tài chính tối ưu cho Solo Founder & SME Việt Nam.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
