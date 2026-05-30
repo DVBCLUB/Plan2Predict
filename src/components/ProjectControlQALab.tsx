@@ -2,9 +2,10 @@ import React, { useMemo, useState } from 'react';
 import SystemMapSandbox from './SystemMapSandbox';
 import MonthEndCloseLab from './MonthEndCloseLab';
 import MLExplainabilityLab from './MLExplainabilityLab';
-import { Bot, Brain, Bug, CheckCircle2, ClipboardCheck, FileCheck2, KeyRound, ListChecks, LockKeyhole, Map, RotateCcw, ShieldCheck, Target, TestTube2, FileSpreadsheet } from 'lucide-react';
+import TaxAccountingRuleLibrary from './TaxAccountingRuleLibrary';
+import { BookOpen, Bot, Brain, Bug, CheckCircle2, ClipboardCheck, FileCheck2, KeyRound, ListChecks, LockKeyhole, Map, RotateCcw, ShieldCheck, Target, TestTube2, FileSpreadsheet } from 'lucide-react';
 
-type TabKey = 'ai_team' | 'acceptance' | 'qa_matrix' | 'bug_triage' | 'release' | 'rollback' | 'risk_register' | 'security_governance' | 'roadmap_backlog' | 'system_map' | 'month_end_close' | 'ml_explainability';
+type TabKey = 'ai_team' | 'acceptance' | 'qa_matrix' | 'bug_triage' | 'release' | 'rollback' | 'risk_register' | 'security_governance' | 'roadmap_backlog' | 'system_map' | 'month_end_close' | 'ml_explainability' | 'rule_library';
 
 type TabItem = { id: TabKey; order: string; title: string; subtitle: string; icon: React.ComponentType<{ className?: string }>; badge: string; };
 
@@ -20,7 +21,8 @@ const tabs: TabItem[] = [
   { id: 'roadmap_backlog', order: '09', title: 'Roadmap & Backlog Planner', subtitle: 'Lộ trình phát triển theo phase, ưu tiên và tiêu chí xong', icon: ListChecks, badge: 'PLAN' },
   { id: 'system_map', order: '10', title: 'System Map / About Sandbox', subtitle: 'Bản đồ tổng thể dự án cho người mới', icon: Map, badge: 'MAP' },
   { id: 'month_end_close', order: '11', title: 'Month-end Close Lab', subtitle: 'Khóa sổ cuối tháng và đối chiếu số liệu', icon: FileSpreadsheet, badge: 'CLOSE' },
-  { id: 'ml_explainability', order: '12', title: 'ML Explainability Lab', subtitle: 'Giải thích model, drift, threshold và backtesting', icon: Brain, badge: 'XAI' }
+  { id: 'ml_explainability', order: '12', title: 'ML Explainability Lab', subtitle: 'Giải thích model, drift, threshold và backtesting', icon: Brain, badge: 'XAI' },
+  { id: 'rule_library', order: '13', title: 'Tax & Accounting Rule Library', subtitle: 'Rule card VAT, TNDN, TNCN, FCT, xây dựng, audit', icon: BookOpen, badge: 'RULE' }
 ];
 
 const aiAssignments = [
@@ -38,6 +40,7 @@ export default function ProjectControlQALab() {
   if (activeTab === 'system_map') return <SystemMapSandbox />;
   if (activeTab === 'month_end_close') return <MonthEndCloseLab />;
   if (activeTab === 'ml_explainability') return <MLExplainabilityLab />;
+  if (activeTab === 'rule_library') return <TaxAccountingRuleLibrary />;
 
   return (
     <div className="space-y-6 text-slate-100 select-text pb-12">
@@ -47,7 +50,7 @@ export default function ProjectControlQALab() {
           <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0"><ClipboardCheck className="w-6 h-6" /></div>
           <div>
             <h1 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">✅ Project Control & QA Lab <span className="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/25 text-[9px] font-black rounded font-mono">AI PM · QA · RELEASE · SECURITY</span></h1>
-            <p className="text-xs text-slate-400 mt-1 font-semibold leading-relaxed max-w-4xl">Phòng lab dành cho người quản lý dự án không chuyên code: giao việc cho AI, nghiệm thu tính năng, test build, phân loại lỗi, release, rollback, backlog, khóa sổ, ML explainability và kiểm soát bảo mật dữ liệu.</p>
+            <p className="text-xs text-slate-400 mt-1 font-semibold leading-relaxed max-w-4xl">Phòng lab dành cho người quản lý dự án không chuyên code: giao việc cho AI, nghiệm thu tính năng, test build, phân loại lỗi, release, rollback, backlog, khóa sổ, ML explainability, rule library và kiểm soát bảo mật dữ liệu.</p>
           </div>
         </div>
       </section>
@@ -93,7 +96,7 @@ function AcceptanceBuilder() {
 }
 
 function QAMatrix() {
-  const rows = [['UI/Layout', 'Mở desktop/mobile, kiểm tra sidebar, overflow, text không vỡ', 'Manual'], ['Navigation', 'Bấm từng mục menu, quay lại, không crash', 'Manual'], ['Build', 'npm run build pass', 'Automated'], ['Cloud Run', 'Revision mới chạy, health endpoint ok', 'Cloud'], ['Gemini API', 'Thiếu key hiện lỗi thân thiện, có key thì gọi được', 'API'], ['Cost', 'min 0, max 1, request-based billing', 'Cloud config'], ['Security', 'Không lộ API key, không dùng dữ liệu thật trong sandbox', 'Review'], ['Month-end Close', 'Checklist khóa sổ copy được, reconciliation tính đúng chênh lệch', 'Business QA'], ['ML Explainability', 'Score, threshold, drift và copy report hoạt động', 'ML QA']];
+  const rows = [['UI/Layout', 'Mở desktop/mobile, kiểm tra sidebar, overflow, text không vỡ', 'Manual'], ['Navigation', 'Bấm từng mục menu, quay lại, không crash', 'Manual'], ['Build', 'npm run build pass', 'Automated'], ['Cloud Run', 'Revision mới chạy, health endpoint ok', 'Cloud'], ['Gemini API', 'Thiếu key hiện lỗi thân thiện, có key thì gọi được', 'API'], ['Cost', 'min 0, max 1, request-based billing', 'Cloud config'], ['Security', 'Không lộ API key, không dùng dữ liệu thật trong sandbox', 'Review'], ['Month-end Close', 'Checklist khóa sổ copy được, reconciliation tính đúng chênh lệch', 'Business QA'], ['ML Explainability', 'Score, threshold, drift và copy report hoạt động', 'ML QA'], ['Rule Library', 'Lọc rule card, copy markdown và disclaimer hoạt động', 'Knowledge QA']];
   return <Table headers={['Nhóm test', 'Cần kiểm tra', 'Loại']} rows={rows} />;
 }
 
@@ -127,7 +130,7 @@ function SecurityGovernance() {
 
 function RoadmapBacklog() {
   const [focus, setFocus] = useState('tools');
-  const roadmap = { tools: ['Mở rộng Expense Checker theo ngành xây dựng', 'Thêm Journal Simulator có nhập số tiền/VAT', 'Thêm xuất checklist dạng markdown để copy'], accounting: ['Bổ sung VAS 21/24/25', 'Thêm Month-end Close / Reconciliation Lab', 'Tạo bảng đối chiếu kế toán-thuế cho từng khoản chi'], ml: ['Thêm SHAP/feature importance mô phỏng', 'Thêm ML Explainability / Backtesting Lab', 'Thêm mini dataset mẫu để chạy fraud scoring'], devops: ['Thêm build status checklist', 'Thêm release note generator', 'Thêm hướng dẫn custom domain Firebase/Cloud Run'] } as const;
+  const roadmap = { tools: ['Mở rộng Expense Checker theo ngành xây dựng', 'Thêm Journal Simulator có nhập số tiền/VAT', 'Thêm xuất checklist dạng markdown để copy'], accounting: ['Bổ sung VAS 21/24/25', 'Thêm Tax & Accounting Rule Library', 'Tạo bảng đối chiếu kế toán-thuế cho từng khoản chi'], ml: ['Thêm SHAP/feature importance mô phỏng', 'Thêm ML Explainability / Backtesting Lab', 'Thêm mini dataset mẫu để chạy fraud scoring'], devops: ['Thêm build status checklist', 'Thêm release note generator', 'Thêm hướng dẫn custom domain Firebase/Cloud Run'] } as const;
   const items = roadmap[focus as keyof typeof roadmap];
   return <div className="space-y-4"><Panel title="Roadmap nguyên tắc" tone="amber">Ưu tiên module có thể bấm thử, học được ngay, không phá layout. Mỗi phase chỉ nên sửa 1-2 component và có tiêu chí nghiệm thu rõ.</Panel><div><label className="text-[10px] text-slate-500 font-black uppercase">Nhóm ưu tiên</label><select value={focus} onChange={e => setFocus(e.target.value)} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-2.5 text-xs"><option value="tools">Interactive Tools</option><option value="accounting">Accounting Knowledge</option><option value="ml">Advanced ML</option><option value="devops">DevOps / Cloud</option></select></div><Panel title="Backlog đề xuất tiếp theo" tone="emerald"><ul className="space-y-2">{items.map(item => <li key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />{item}</li>)}</ul></Panel><Table headers={['Tiêu chí Done', 'Mô tả']} rows={[['Build pass', 'Cloud Run build không lỗi'], ['UI không vỡ', 'Desktop/mobile vẫn xem được'], ['Có dữ liệu mẫu', 'Người học bấm thử ngay không cần nhập quá nhiều'], ['Không lộ secret', 'Không có API key hoặc dữ liệu thật trong code'], ['Có rollback', 'Biết commit/revision để quay lại nếu lỗi']]} /></div>;
 }
