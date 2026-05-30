@@ -22,7 +22,19 @@ import SourceFreshnessMonitorLab from './SourceFreshnessMonitorLab';
 import VasIfrsBridgeLab from './VasIfrsBridgeLab';
 import { CheckCircle2, Copy, FileText, Megaphone, PackageCheck, ShieldCheck } from 'lucide-react';
 
+type DeepResearchSection = 'overview' | 'knowledge' | 'data' | 'ml_learning' | 'governance' | 'release';
+
+const sections: { id: DeepResearchSection; label: string; description: string }[] = [
+  { id: 'overview', label: 'Overview', description: 'Bản đồ, navigator, quick start và glossary.' },
+  { id: 'knowledge', label: 'Knowledge', description: 'Gap matrix, VAS/IFRS/Tax bridge và kiểm soát nguồn.' },
+  { id: 'data', label: 'Data Quality', description: 'Dataset mẫu, lineage và pipeline kiểm tra dữ liệu.' },
+  { id: 'ml_learning', label: 'ML & Learning', description: 'Model card, rubric, case study và quiz.' },
+  { id: 'governance', label: 'Governance', description: 'AI policy, roadmap, progress và feedback loop.' },
+  { id: 'release', label: 'Release / DevOps', description: 'Release notes, build status và cloud launch.' }
+];
+
 export default function ReleaseNotesGenerator() {
+  const [activeSection, setActiveSection] = useState<DeepResearchSection>('overview');
   const [version, setVersion] = useState('v0.6.0');
   const [moduleName, setModuleName] = useState('Project Control & QA Lab');
   const [changes, setChanges] = useState('Thêm Roadmap & Backlog Planner\nThêm Security & Data Governance\nCải thiện checklist release và rollback');
@@ -45,35 +57,35 @@ export default function ReleaseNotesGenerator() {
       <section className="bg-gradient-to-r from-sky-950/20 via-[#060a12] to-emerald-950/20 border border-slate-800 rounded-2xl p-5">
         <div className="flex items-start gap-4">
           <div className="w-11 h-11 rounded-2xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0"><Megaphone className="w-5 h-5" /></div>
-          <div><h2 className="text-sm font-black text-white uppercase tracking-widest">Release Notes Generator</h2><p className="text-xs text-slate-400 mt-1 font-semibold leading-relaxed">Tạo ghi chú release ngắn gọn cho mỗi lần AI sửa code, giúp kiểm soát thay đổi, test, rollback và triển khai Cloud Run.</p></div>
+          <div><h2 className="text-sm font-black text-white uppercase tracking-widest">Deep Research Control Center</h2><p className="text-xs text-slate-400 mt-1 font-semibold leading-relaxed">Gom các module Deep Research thành tab để tránh mục 09 quá dài, dễ điều hướng hơn và chỉ render nhóm module đang cần dùng.</p></div>
         </div>
       </section>
-      <DeepResearchReviewIndex />
-      <DeepResearchModuleNavigator />
-      <KnowledgeGapMatrix />
-      <VasIfrsBridgeLab />
-      <SourceFreshnessMonitorLab />
-      <SampleDatasetExplorer />
-      <DataLineageGovernanceLab />
-      <ModelCardTemplateLab />
-      <LearningOutcomeRubricLab />
-      <DeepResearchQuickStartGuide />
-      <DeepResearchGlossaryLab />
-      <DeepResearchProgressTracker />
-      <DeepResearchFeedbackLoopLab />
-      <div className="grid md:grid-cols-2 gap-4"><Input label="Version" value={version} onChange={setVersion} /><Input label="Module / tính năng" value={moduleName} onChange={setModuleName} /></div>
-      <div><label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Danh sách thay đổi, mỗi dòng 1 ý</label><textarea value={changes} onChange={e => setChanges(e.target.value)} rows={5} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" /></div>
-      <div><label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Rủi ro / ghi chú</label><textarea value={risk} onChange={e => setRisk(e.target.value)} rows={3} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" /></div>
-      <div className="grid md:grid-cols-3 gap-3"><InfoCard icon={PackageCheck} title="Release" text="Có tên version và module rõ ràng." /><InfoCard icon={CheckCircle2} title="QA" text="Có checklist build/UI/security." /><InfoCard icon={ShieldCheck} title="Rollback" text="Có ghi chú rollback khi revision lỗi." /></div>
-      <section className="space-y-2"><div className="flex items-center justify-between gap-3"><h3 className="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-2"><FileText className="w-4 h-4" />Release note preview</h3><button onClick={copy} className="text-[9px] font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 px-2.5 py-1.5 rounded-lg flex items-center gap-1">{copied ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}{copied ? 'Copied' : 'Copy'}</button></div><pre className="p-4 bg-[#02050b] border border-slate-850 rounded-xl text-[11px] font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">{releaseNote}</pre></section>
-      <BuildStatusChecker />
-      <DataQualityPipelineLab />
-      <CaseStudyScenarioLab />
-      <LearningAssessmentQuizLab />
-      <ProductMaturityRoadmapLab />
-      <AIGovernancePolicyLab />
-      <SourceCitationChecklistLab />
-      <CloudLaunchChecklist />
+
+      <section className="p-3 bg-[#060a12] border border-slate-850 rounded-2xl space-y-3">
+        <div className="flex flex-wrap gap-2">
+          {sections.map(section => (
+            <button key={section.id} onClick={() => setActiveSection(section.id)} className={`px-3 py-2 rounded-xl text-[10px] font-black uppercase border transition-all ${activeSection === section.id ? 'bg-sky-600 border-sky-500 text-white shadow-lg shadow-sky-950/30' : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'}`}>{section.label}</button>
+          ))}
+        </div>
+        <p className="text-[10.5px] text-slate-500 font-semibold leading-relaxed">{sections.find(section => section.id === activeSection)?.description}</p>
+      </section>
+
+      {activeSection === 'overview' && <div className="space-y-5"><DeepResearchReviewIndex /><DeepResearchModuleNavigator /><DeepResearchQuickStartGuide /><DeepResearchGlossaryLab /></div>}
+      {activeSection === 'knowledge' && <div className="space-y-5"><KnowledgeGapMatrix /><VasIfrsBridgeLab /><SourceFreshnessMonitorLab /><SourceCitationChecklistLab /></div>}
+      {activeSection === 'data' && <div className="space-y-5"><SampleDatasetExplorer /><DataLineageGovernanceLab /><DataQualityPipelineLab /></div>}
+      {activeSection === 'ml_learning' && <div className="space-y-5"><ModelCardTemplateLab /><LearningOutcomeRubricLab /><CaseStudyScenarioLab /><LearningAssessmentQuizLab /></div>}
+      {activeSection === 'governance' && <div className="space-y-5"><AIGovernancePolicyLab /><ProductMaturityRoadmapLab /><DeepResearchProgressTracker /><DeepResearchFeedbackLoopLab /></div>}
+      {activeSection === 'release' && (
+        <div className="space-y-5">
+          <div className="grid md:grid-cols-2 gap-4"><Input label="Version" value={version} onChange={setVersion} /><Input label="Module / tính năng" value={moduleName} onChange={setModuleName} /></div>
+          <div><label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Danh sách thay đổi, mỗi dòng 1 ý</label><textarea value={changes} onChange={e => setChanges(e.target.value)} rows={5} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" /></div>
+          <div><label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Rủi ro / ghi chú</label><textarea value={risk} onChange={e => setRisk(e.target.value)} rows={3} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" /></div>
+          <div className="grid md:grid-cols-3 gap-3"><InfoCard icon={PackageCheck} title="Release" text="Có tên version và module rõ ràng." /><InfoCard icon={CheckCircle2} title="QA" text="Có checklist build/UI/security." /><InfoCard icon={ShieldCheck} title="Rollback" text="Có ghi chú rollback khi revision lỗi." /></div>
+          <section className="space-y-2"><div className="flex items-center justify-between gap-3"><h3 className="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-2"><FileText className="w-4 h-4" />Release note preview</h3><button onClick={copy} className="text-[9px] font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 px-2.5 py-1.5 rounded-lg flex items-center gap-1">{copied ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}{copied ? 'Copied' : 'Copy'}</button></div><pre className="p-4 bg-[#02050b] border border-slate-850 rounded-xl text-[11px] font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">{releaseNote}</pre></section>
+          <BuildStatusChecker />
+          <CloudLaunchChecklist />
+        </div>
+      )}
     </div>
   );
 }
