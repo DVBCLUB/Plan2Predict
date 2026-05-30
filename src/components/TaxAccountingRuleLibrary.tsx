@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { AlertTriangle, BookOpen, CheckCircle2, ClipboardList, Copy, FileSearch, Landmark, ReceiptText, Scale, Search, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, BookOpen, CalendarDays, CheckCircle2, ClipboardList, Copy, ExternalLink, FileSearch, Landmark, ReceiptText, Scale, Search, ShieldCheck, Tags } from 'lucide-react';
+import { getSourcesForRule, sourceStatusLabel, type SourceRecord } from '../data/sourceRegistry';
 
 type RuleArea = 'vat' | 'cit' | 'pit' | 'fct' | 'construction' | 'audit';
 
@@ -98,13 +99,19 @@ export default function TaxAccountingRuleLibrary() {
   const [area, setArea] = useState<RuleArea | 'all'>('all');
   const [selectedId, setSelectedId] = useState(rules[0].id);
   const [copied, setCopied] = useState(false);
+  const [showSources, setShowSources] = useState(true);
 
   const filtered = area === 'all' ? rules : rules.filter(rule => rule.area === area);
   const selected = filtered.find(rule => rule.id === selectedId) ?? filtered[0] ?? rules[0];
+  const sources = getSourcesForRule(selected.id);
+  const needsReviewCount = sources.filter(source => source.status === 'needs_review').length;
 
   const markdown = useMemo(() => {
-    return `# Source-linked Rule Card - ${selected.title}\n\n## Mục tiêu\n${selected.purpose}\n\n## Logic chính\n${selected.keyIdea}\n\n## Hồ sơ cần có\n${selected.documents.map(item => `- ${item}`).join('\n')}\n\n## Cảnh báo rủi ro\n${selected.warning.map(item => `- ${item}`).join('\n')}\n\n## Mô phỏng trong sandbox\n${selected.simulation}\n\n## Ghi chú nguồn\n${selected.sourceNote}\n\n> Nội dung phục vụ học tập. Khi áp dụng hồ sơ thật cần kiểm tra văn bản pháp luật, chuẩn mực và quy định hiện hành.`;
-  }, [selected]);
+    const sourceBlock = sources.length
+      ? sources.map(source => `- ${source.authority} | ${source.documentNumber} | ${source.paragraphOrArticleRef} | Status: ${sourceStatusLabel(source.status)} | Last reviewed: ${source.lastReviewedAt}`).join('\n')
+      : '- Chưa có source registry metadata';
+    return `# Source-linked Rule Card - ${selected.title}\n\n## Mục tiêu\n${selected.purpose}\n\n## Logic chính\n${selected.keyIdea}\n\n## Hồ sơ cần có\n${selected.documents.map(item => `- ${item}`).join('\n')}\n\n## Cảnh báo rủi ro\n${selected.warning.map(item => `- ${item}`).join('\n')}\n\n## Mô phỏng trong sandbox\n${selected.simulation}\n\n## Source Registry\n${sourceBlock}\n\n## Ghi chú nguồn\n${selected.sourceNote}\n\n> Nội dung phục vụ học tập. Khi áp dụng hồ sơ thật cần kiểm tra văn bản pháp luật, chuẩn mực và quy định hiện hành. Nếu source status còn Needs review thì chưa dùng như kết luận cho hồ sơ thật.`;
+  }, [selected, sources]);
 
   const copy = async () => {
     await navigator.clipboard.writeText(markdown);
@@ -120,26 +127,43 @@ export default function TaxAccountingRuleLibrary() {
           <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0"><Landmark className="w-6 h-6" /></div>
           <div>
             <h1 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">📚 Tax & Accounting Rule Library <span className="px-2 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/25 text-[9px] font-black rounded font-mono">VAS · TAX · AUDIT</span></h1>
-            <p className="text-xs text-slate-400 mt-1 font-semibold leading-relaxed max-w-4xl">Thư viện rule card có cấu trúc: mục tiêu, logic, hồ sơ, rủi ro, mô phỏng và ghi chú nguồn. Đây là nền để sau này gắn văn bản pháp luật/chuẩn mực cụ thể vào từng card.</p>
+            <p className="text-xs text-slate-400 mt-1 font-semibold leading-relaxed max-w-4xl">Thư viện rule card có cấu trúc: mục tiêu, logic, hồ sơ, rủi ro, mô phỏng và source registry. Đây là bước đầu biến nội dung sandbox thành hệ thống học có metadata nguồn, ngày rà soát và trạng thái cập nhật.</p>
           </div>
         </div>
       </section>
 
-      <div className="flex flex-wrap gap-2">
-        {(['all', 'vat', 'cit', 'pit', 'fct', 'construction', 'audit'] as const).map(key => (
-          <button key={key} onClick={() => { setArea(key); const first = key === 'all' ? rules[0] : rules.find(rule => rule.area === key); if (first) setSelectedId(first.id); }} className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all border ${area === key ? 'bg-blue-600 border-blue-500 text-white' : 'bg-slate-950 border-slate-850 text-slate-400 hover:text-white'}`}>{areaLabels[key]}</button>
-        ))}
+      <div className="grid md:grid-cols-4 gap-3">
+        <Metric title="Rule cards" value={String(rules.length)} tone="blue" />
+        <Metric title="Source records" value={String(rules.reduce((sum, rule) => sum + getSourcesForRule(rule.id).length, 0))} tone="emerald" />
+        <Metric title="Needs review" value={String(rules.flatMap(rule => getSourcesForRule(rule.id)).filter(source => source.status === 'needs_review').length)} tone="amber" />
+        <Metric title="Mode" value="Sandbox" tone="rose" />
+      </div>
+
+      <div className="flex flex-wrap gap-2 items-center justify-between">
+        <div className="flex flex-wrap gap-2">
+          {(['all', 'vat', 'cit', 'pit', 'fct', 'construction', 'audit'] as const).map(key => (
+            <button key={key} onClick={() => { setArea(key); const first = key === 'all' ? rules[0] : rules.find(rule => rule.area === key); if (first) setSelectedId(first.id); }} className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all border ${area === key ? 'bg-blue-600 border-blue-500 text-white' : 'bg-slate-950 border-slate-850 text-slate-400 hover:text-white'}`}>{areaLabels[key]}</button>
+          ))}
+        </div>
+        <button onClick={() => setShowSources(value => !value)} className="px-3 py-1.5 rounded-xl text-[10px] font-black uppercase border bg-slate-950 border-slate-850 text-slate-300 hover:text-white flex items-center gap-1.5"><FileSearch className="w-3.5 h-3.5" />{showSources ? 'Ẩn source drawer' : 'Hiện source drawer'}</button>
       </div>
 
       <div className="grid lg:grid-cols-12 gap-6">
         <aside className="lg:col-span-4 space-y-2">
-          {filtered.map(rule => (
-            <button key={rule.id} onClick={() => setSelectedId(rule.id)} className={`w-full text-left p-3.5 rounded-xl border transition-all ${selected.id === rule.id ? 'bg-blue-500/10 border-blue-500 ring-1 ring-blue-500/30' : 'bg-[#060a12] border-slate-850 hover:bg-slate-900'}`}>
-              <span className="text-[9px] font-black text-blue-400 font-mono uppercase">{areaLabels[rule.area]}</span>
-              <span className="text-xs font-bold text-slate-200 block mt-1">{rule.title}</span>
-              <span className="text-[10px] text-slate-500 block mt-0.5 leading-snug line-clamp-2">{rule.purpose}</span>
-            </button>
-          ))}
+          {filtered.map(rule => {
+            const ruleSources = getSourcesForRule(rule.id);
+            const needsReview = ruleSources.some(source => source.status === 'needs_review');
+            return (
+              <button key={rule.id} onClick={() => setSelectedId(rule.id)} className={`w-full text-left p-3.5 rounded-xl border transition-all ${selected.id === rule.id ? 'bg-blue-500/10 border-blue-500 ring-1 ring-blue-500/30' : 'bg-[#060a12] border-slate-850 hover:bg-slate-900'}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[9px] font-black text-blue-400 font-mono uppercase">{areaLabels[rule.area]}</span>
+                  <span className={`text-[8px] font-black uppercase rounded px-1.5 py-0.5 border ${needsReview ? 'bg-amber-500/10 text-amber-300 border-amber-500/25' : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/25'}`}>{needsReview ? 'Needs review' : 'Source linked'}</span>
+                </div>
+                <span className="text-xs font-bold text-slate-200 block mt-1">{rule.title}</span>
+                <span className="text-[10px] text-slate-500 block mt-0.5 leading-snug line-clamp-2">{rule.purpose}</span>
+              </button>
+            );
+          })}
         </aside>
 
         <main className="lg:col-span-8 bg-slate-950/50 border border-slate-850 rounded-2xl p-5 space-y-5">
@@ -148,6 +172,11 @@ export default function TaxAccountingRuleLibrary() {
               <span className="text-[9px] font-black text-blue-400 font-mono uppercase tracking-widest">{areaLabels[selected.area]} · Rule Card</span>
               <h2 className="text-base font-black text-white mt-1 flex items-center gap-2"><BookOpen className="w-5 h-5 text-blue-400" />{selected.title}</h2>
               <p className="text-xs text-slate-400 mt-1 font-semibold">{selected.purpose}</p>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <Badge tone={needsReviewCount > 0 ? 'amber' : 'emerald'}>{needsReviewCount > 0 ? `${needsReviewCount} source needs review` : 'Source linked'}</Badge>
+                <Badge tone="rose">Simulation only</Badge>
+                <Badge tone="blue">{sources.length} source record(s)</Badge>
+              </div>
             </div>
             <button onClick={copy} className="px-3 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[10px] font-black rounded-xl flex items-center gap-1.5 shrink-0">
               {copied ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -162,13 +191,70 @@ export default function TaxAccountingRuleLibrary() {
             <ListPanel title="Cảnh báo rủi ro" icon={AlertTriangle} items={selected.warning} tone="rose" />
           </div>
 
+          {showSources && <SourceDrawer sources={sources} />}
+
           <Panel title="Mô phỏng trong sandbox" icon={ReceiptText} tone="purple">{selected.simulation}</Panel>
           <Panel title="Ghi chú nguồn / kiểm tra văn bản" icon={FileSearch} tone="amber">{selected.sourceNote}</Panel>
-          <Panel title="Nguyên tắc sử dụng" icon={ShieldCheck} tone="emerald">Không dùng rule card như kết luận pháp lý cuối cùng. Khi áp dụng hồ sơ thật, cần kiểm tra văn bản pháp luật, chuẩn mực, chính sách kế toán nội bộ và hồ sơ thực tế tại thời điểm phát sinh.</Panel>
+          <Panel title="Nguyên tắc sử dụng" icon={ShieldCheck} tone="emerald">Không dùng rule card như kết luận pháp lý cuối cùng. Khi source status còn Needs review, nội dung chỉ dùng để học và thiết kế checklist; trước khi áp dụng hồ sơ thật cần kiểm tra văn bản pháp luật, chuẩn mực, chính sách kế toán nội bộ và hồ sơ thực tế tại thời điểm phát sinh.</Panel>
         </main>
       </div>
     </div>
   );
+}
+
+function Badge({ children, tone }: { children: React.ReactNode; tone: 'blue' | 'emerald' | 'amber' | 'rose' }) {
+  const colors = { blue: 'bg-blue-500/10 text-blue-300 border-blue-500/25', emerald: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/25', amber: 'bg-amber-500/10 text-amber-300 border-amber-500/25', rose: 'bg-rose-500/10 text-rose-300 border-rose-500/25' }[tone];
+  return <span className={`px-2 py-1 rounded-lg border text-[9px] font-black uppercase ${colors}`}>{children}</span>;
+}
+
+function Metric({ title, value, tone }: { title: string; value: string; tone: 'blue' | 'emerald' | 'amber' | 'rose' }) {
+  const colors = { blue: 'text-blue-300 border-blue-500/20 bg-blue-950/10', emerald: 'text-emerald-300 border-emerald-500/20 bg-emerald-950/10', amber: 'text-amber-300 border-amber-500/20 bg-amber-950/10', rose: 'text-rose-300 border-rose-500/20 bg-rose-950/10' }[tone];
+  return <div className={`p-3 rounded-xl border ${colors}`}><span className="text-[9px] text-slate-500 font-black uppercase block">{title}</span><p className="text-xs font-black mt-1">{value}</p></div>;
+}
+
+function SourceDrawer({ sources }: { sources: SourceRecord[] }) {
+  if (!sources.length) return <Panel title="Source Registry" icon={Search} tone="rose">Chưa có source metadata. Không dùng rule này cho hồ sơ thật.</Panel>;
+  return (
+    <section className="p-4 rounded-xl border border-amber-500/25 bg-amber-950/10 space-y-3">
+      <h3 className="text-[10px] font-black uppercase tracking-wider text-white flex items-center gap-2"><Tags className="w-4 h-4 text-amber-400" />Source Registry / Metadata nguồn</h3>
+      <div className="space-y-3">
+        {sources.map(source => <SourceCard key={source.id} source={source} />)}
+      </div>
+    </section>
+  );
+}
+
+function SourceCard({ source }: { source: SourceRecord }) {
+  const statusTone = source.status === 'source_linked' ? 'emerald' : source.status === 'needs_review' ? 'amber' : source.status === 'superseded_watch' ? 'rose' : 'blue';
+  return (
+    <article className="p-3 rounded-xl border border-slate-850 bg-[#060a12] space-y-3">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-black text-white leading-snug">{source.authority}</p>
+          <p className="text-[10px] text-slate-500 font-semibold mt-1">{source.sourceType}</p>
+        </div>
+        <Badge tone={statusTone}>{sourceStatusLabel(source.status)}</Badge>
+      </div>
+      <div className="grid md:grid-cols-2 gap-2 text-[10.5px] font-semibold text-slate-300">
+        <Meta label="Document" value={source.documentNumber} />
+        <Meta label="Article / paragraph" value={source.paragraphOrArticleRef} />
+        <Meta label="Effective date" value={source.effectiveDate} />
+        <Meta label="Jurisdiction" value={source.jurisdiction} />
+        <Meta label="Language" value={source.language} />
+        <Meta label="Confidence" value={source.confidence.toUpperCase()} />
+      </div>
+      <div className="flex flex-wrap items-center gap-2 text-[10px] text-slate-400 font-bold">
+        <span className="flex items-center gap-1"><CalendarDays className="w-3.5 h-3.5 text-amber-400" />Last reviewed: {source.lastReviewedAt}</span>
+        {source.simulationOnly && <Badge tone="rose">Simulation only</Badge>}
+        {source.url && <a href={source.url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-blue-300 hover:text-blue-200"><ExternalLink className="w-3.5 h-3.5" />Open authority</a>}
+      </div>
+      <p className="text-[10.5px] text-slate-400 font-semibold leading-relaxed border-t border-slate-850 pt-3">{source.reviewerNote}</p>
+    </article>
+  );
+}
+
+function Meta({ label, value }: { label: string; value: string }) {
+  return <div className="p-2 rounded-lg bg-slate-950/60 border border-slate-850"><span className="text-[8px] text-slate-500 font-black uppercase block mb-0.5">{label}</span><span>{value}</span></div>;
 }
 
 function Panel({ title, children, icon: Icon, tone }: { title: string; children: React.ReactNode; icon: React.ComponentType<{ className?: string }>; tone: 'blue' | 'emerald' | 'rose' | 'amber' | 'purple' }) {
