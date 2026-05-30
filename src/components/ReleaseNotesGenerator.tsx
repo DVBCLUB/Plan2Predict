@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import BuildStatusChecker from './BuildStatusChecker';
 import CloudLaunchChecklist from './CloudLaunchChecklist';
+import DataQualityPipelineLab from './DataQualityPipelineLab';
 import { CheckCircle2, Copy, FileText, Megaphone, PackageCheck, ShieldCheck } from 'lucide-react';
 
 export default function ReleaseNotesGenerator() {
@@ -35,6 +36,7 @@ export default function ReleaseNotesGenerator() {
       <div className="grid md:grid-cols-3 gap-3"><InfoCard icon={PackageCheck} title="Release" text="Có tên version và module rõ ràng." /><InfoCard icon={CheckCircle2} title="QA" text="Có checklist build/UI/security." /><InfoCard icon={ShieldCheck} title="Rollback" text="Có ghi chú rollback khi revision lỗi." /></div>
       <section className="space-y-2"><div className="flex items-center justify-between gap-3"><h3 className="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-2"><FileText className="w-4 h-4" />Release note preview</h3><button onClick={copy} className="text-[9px] font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 px-2.5 py-1.5 rounded-lg flex items-center gap-1">{copied ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}{copied ? 'Copied' : 'Copy'}</button></div><pre className="p-4 bg-[#02050b] border border-slate-850 rounded-xl text-[11px] font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">{releaseNote}</pre></section>
       <BuildStatusChecker />
+      <DataQualityPipelineLab />
       <CloudLaunchChecklist />
     </div>
   );
