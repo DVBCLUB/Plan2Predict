@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import AIGovernancePolicyLab from './AIGovernancePolicyLab';
 import BuildStatusChecker from './BuildStatusChecker';
 import CaseStudyScenarioLab from './CaseStudyScenarioLab';
 import CloudLaunchChecklist from './CloudLaunchChecklist';
@@ -41,6 +42,7 @@ export default function ReleaseNotesGenerator() {
       <DataQualityPipelineLab />
       <CaseStudyScenarioLab />
       <ProductMaturityRoadmapLab />
+      <AIGovernancePolicyLab />
       <CloudLaunchChecklist />
     </div>
   );
