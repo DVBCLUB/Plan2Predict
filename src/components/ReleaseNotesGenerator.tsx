@@ -4,6 +4,7 @@ import BuildStatusChecker from './BuildStatusChecker';
 import CaseStudyScenarioLab from './CaseStudyScenarioLab';
 import CloudLaunchChecklist from './CloudLaunchChecklist';
 import DataQualityPipelineLab from './DataQualityPipelineLab';
+import DeepResearchFeedbackLoopLab from './DeepResearchFeedbackLoopLab';
 import DeepResearchGlossaryLab from './DeepResearchGlossaryLab';
 import DeepResearchModuleNavigator from './DeepResearchModuleNavigator';
 import DeepResearchProgressTracker from './DeepResearchProgressTracker';
@@ -45,6 +46,7 @@ export default function ReleaseNotesGenerator() {
       <DeepResearchQuickStartGuide />
       <DeepResearchGlossaryLab />
       <DeepResearchProgressTracker />
+      <DeepResearchFeedbackLoopLab />
       <div className="grid md:grid-cols-2 gap-4"><Input label="Version" value={version} onChange={setVersion} /><Input label="Module / tính năng" value={moduleName} onChange={setModuleName} /></div>
       <div><label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Danh sách thay đổi, mỗi dòng 1 ý</label><textarea value={changes} onChange={e => setChanges(e.target.value)} rows={5} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" /></div>
       <div><label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Rủi ro / ghi chú</label><textarea value={risk} onChange={e => setRisk(e.target.value)} rows={3} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" /></div>
