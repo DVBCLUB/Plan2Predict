@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import CloudLaunchChecklist from './CloudLaunchChecklist';
 import { CheckCircle2, Copy, FileText, Megaphone, PackageCheck, ShieldCheck } from 'lucide-react';
 
 export default function ReleaseNotesGenerator() {
@@ -10,7 +11,7 @@ export default function ReleaseNotesGenerator() {
 
   const releaseNote = useMemo(() => {
     const changeLines = changes.split('\n').map(line => line.trim()).filter(Boolean);
-    return `# Release ${version} - ${moduleName}\n\n## Mục tiêu\nMở rộng LedgerFlow Studio theo hướng học tập/sandbox, giữ nguyên cấu trúc dashboard hiện tại.\n\n## Thay đổi chính\n${changeLines.map(line => `- ${line}`).join('\n')}\n\n## Kiểm tra trước deploy\n- Build Cloud Run phải pass.\n- UI desktop/mobile không vỡ.\n- Sidebar và tab navigation hoạt động.\n- Không commit API key hoặc dữ liệu thật.\n- Nếu revision mới lỗi, rollback về revision cũ.\n\n## Rủi ro / ghi chú\n${risk}\n\n## Trạng thái\nReady for Cloud Run build nếu không có lỗi TypeScript/Vite.`;
+    return `# Release ${version} - ${moduleName}\n\n## Mục tiêu\nMở rộng LedgerFlow Studio theo hướng học tập/sandbox, giữ nguyên cấu trúc dashboard hiện tại.\n\n## Thay đổi chính\n${changeLines.map(line => `- ${line}`).join('\n')}\n\n## Kiểm tra trước deploy\n- Build Cloud Run phải pass.\n- UI desktop/mobile không vỡ.\n- Sidebar và tab navigation hoạt động.\n- Không đưa dữ liệu thật vào bản public.\n- Nếu revision mới lỗi, rollback về revision cũ.\n\n## Rủi ro / ghi chú\n${risk}\n\n## Trạng thái\nReady for Cloud Run build nếu không có lỗi TypeScript/Vite.`;
   }, [version, moduleName, changes, risk]);
 
   const copy = async () => {
@@ -32,38 +33,12 @@ export default function ReleaseNotesGenerator() {
           </div>
         </div>
       </section>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        <Input label="Version" value={version} onChange={setVersion} />
-        <Input label="Module / tính năng" value={moduleName} onChange={setModuleName} />
-      </div>
-
-      <div>
-        <label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Danh sách thay đổi, mỗi dòng 1 ý</label>
-        <textarea value={changes} onChange={e => setChanges(e.target.value)} rows={5} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" />
-      </div>
-
-      <div>
-        <label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Rủi ro / ghi chú</label>
-        <textarea value={risk} onChange={e => setRisk(e.target.value)} rows={3} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" />
-      </div>
-
-      <div className="grid md:grid-cols-3 gap-3">
-        <InfoCard icon={PackageCheck} title="Release" text="Có tên version và module rõ ràng." />
-        <InfoCard icon={CheckCircle2} title="QA" text="Có checklist build/UI/security." />
-        <InfoCard icon={ShieldCheck} title="Rollback" text="Có ghi chú rollback khi revision lỗi." />
-      </div>
-
-      <section className="space-y-2">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-2"><FileText className="w-4 h-4" />Release note preview</h3>
-          <button onClick={copy} className="text-[9px] font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 px-2.5 py-1.5 rounded-lg flex items-center gap-1">
-            {copied ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-            {copied ? 'Copied' : 'Copy'}
-          </button>
-        </div>
-        <pre className="p-4 bg-[#02050b] border border-slate-850 rounded-xl text-[11px] font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">{releaseNote}</pre>
-      </section>
+      <div className="grid md:grid-cols-2 gap-4"><Input label="Version" value={version} onChange={setVersion} /><Input label="Module / tính năng" value={moduleName} onChange={setModuleName} /></div>
+      <div><label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Danh sách thay đổi, mỗi dòng 1 ý</label><textarea value={changes} onChange={e => setChanges(e.target.value)} rows={5} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" /></div>
+      <div><label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-1.5">Rủi ro / ghi chú</label><textarea value={risk} onChange={e => setRisk(e.target.value)} rows={3} className="w-full bg-[#02050b] border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono" /></div>
+      <div className="grid md:grid-cols-3 gap-3"><InfoCard icon={PackageCheck} title="Release" text="Có tên version và module rõ ràng." /><InfoCard icon={CheckCircle2} title="QA" text="Có checklist build/UI/security." /><InfoCard icon={ShieldCheck} title="Rollback" text="Có ghi chú rollback khi revision lỗi." /></div>
+      <section className="space-y-2"><div className="flex items-center justify-between gap-3"><h3 className="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-2"><FileText className="w-4 h-4" />Release note preview</h3><button onClick={copy} className="text-[9px] font-bold text-slate-400 hover:text-white bg-slate-900 border border-slate-800 px-2.5 py-1.5 rounded-lg flex items-center gap-1">{copied ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}{copied ? 'Copied' : 'Copy'}</button></div><pre className="p-4 bg-[#02050b] border border-slate-850 rounded-xl text-[11px] font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">{releaseNote}</pre></section>
+      <CloudLaunchChecklist />
     </div>
   );
 }
