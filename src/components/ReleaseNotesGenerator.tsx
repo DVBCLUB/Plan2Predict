@@ -13,6 +13,7 @@ import DeepResearchReviewIndex from './DeepResearchReviewIndex';
 import KnowledgeGapMatrix from './KnowledgeGapMatrix';
 import LearningAssessmentQuizLab from './LearningAssessmentQuizLab';
 import ProductMaturityRoadmapLab from './ProductMaturityRoadmapLab';
+import SampleDatasetExplorer from './SampleDatasetExplorer';
 import SourceCitationChecklistLab from './SourceCitationChecklistLab';
 import { CheckCircle2, Copy, FileText, Megaphone, PackageCheck, ShieldCheck } from 'lucide-react';
 
@@ -45,6 +46,7 @@ export default function ReleaseNotesGenerator() {
       <DeepResearchReviewIndex />
       <DeepResearchModuleNavigator />
       <KnowledgeGapMatrix />
+      <SampleDatasetExplorer />
       <DeepResearchQuickStartGuide />
       <DeepResearchGlossaryLab />
       <DeepResearchProgressTracker />
