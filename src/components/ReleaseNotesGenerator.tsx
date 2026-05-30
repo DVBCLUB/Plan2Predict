@@ -3,6 +3,7 @@ import BuildStatusChecker from './BuildStatusChecker';
 import CaseStudyScenarioLab from './CaseStudyScenarioLab';
 import CloudLaunchChecklist from './CloudLaunchChecklist';
 import DataQualityPipelineLab from './DataQualityPipelineLab';
+import ProductMaturityRoadmapLab from './ProductMaturityRoadmapLab';
 import { CheckCircle2, Copy, FileText, Megaphone, PackageCheck, ShieldCheck } from 'lucide-react';
 
 export default function ReleaseNotesGenerator() {
@@ -39,6 +40,7 @@ export default function ReleaseNotesGenerator() {
       <BuildStatusChecker />
       <DataQualityPipelineLab />
       <CaseStudyScenarioLab />
+      <ProductMaturityRoadmapLab />
       <CloudLaunchChecklist />
     </div>
   );
