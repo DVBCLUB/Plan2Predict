@@ -5,6 +5,7 @@ import CaseStudyScenarioLab from './CaseStudyScenarioLab';
 import CloudLaunchChecklist from './CloudLaunchChecklist';
 import DataQualityPipelineLab from './DataQualityPipelineLab';
 import DeepResearchGlossaryLab from './DeepResearchGlossaryLab';
+import DeepResearchModuleNavigator from './DeepResearchModuleNavigator';
 import DeepResearchProgressTracker from './DeepResearchProgressTracker';
 import DeepResearchQuickStartGuide from './DeepResearchQuickStartGuide';
 import DeepResearchReviewIndex from './DeepResearchReviewIndex';
@@ -40,6 +41,7 @@ export default function ReleaseNotesGenerator() {
         </div>
       </section>
       <DeepResearchReviewIndex />
+      <DeepResearchModuleNavigator />
       <DeepResearchQuickStartGuide />
       <DeepResearchGlossaryLab />
       <DeepResearchProgressTracker />
