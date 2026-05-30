@@ -10,6 +10,7 @@ import DeepResearchModuleNavigator from './DeepResearchModuleNavigator';
 import DeepResearchProgressTracker from './DeepResearchProgressTracker';
 import DeepResearchQuickStartGuide from './DeepResearchQuickStartGuide';
 import DeepResearchReviewIndex from './DeepResearchReviewIndex';
+import KnowledgeGapMatrix from './KnowledgeGapMatrix';
 import LearningAssessmentQuizLab from './LearningAssessmentQuizLab';
 import ProductMaturityRoadmapLab from './ProductMaturityRoadmapLab';
 import SourceCitationChecklistLab from './SourceCitationChecklistLab';
@@ -43,6 +44,7 @@ export default function ReleaseNotesGenerator() {
       </section>
       <DeepResearchReviewIndex />
       <DeepResearchModuleNavigator />
+      <KnowledgeGapMatrix />
       <DeepResearchQuickStartGuide />
       <DeepResearchGlossaryLab />
       <DeepResearchProgressTracker />
