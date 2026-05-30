@@ -18,6 +18,7 @@ import ModelCardTemplateLab from './ModelCardTemplateLab';
 import ProductMaturityRoadmapLab from './ProductMaturityRoadmapLab';
 import SampleDatasetExplorer from './SampleDatasetExplorer';
 import SourceCitationChecklistLab from './SourceCitationChecklistLab';
+import SourceFreshnessMonitorLab from './SourceFreshnessMonitorLab';
 import VasIfrsBridgeLab from './VasIfrsBridgeLab';
 import { CheckCircle2, Copy, FileText, Megaphone, PackageCheck, ShieldCheck } from 'lucide-react';
 
@@ -51,6 +52,7 @@ export default function ReleaseNotesGenerator() {
       <DeepResearchModuleNavigator />
       <KnowledgeGapMatrix />
       <VasIfrsBridgeLab />
+      <SourceFreshnessMonitorLab />
       <SampleDatasetExplorer />
       <DataLineageGovernanceLab />
       <ModelCardTemplateLab />
