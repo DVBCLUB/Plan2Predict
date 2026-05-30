@@ -19,6 +19,7 @@ import ProductMaturityRoadmapLab from './ProductMaturityRoadmapLab';
 import SampleDatasetExplorer from './SampleDatasetExplorer';
 import SourceCitationChecklistLab from './SourceCitationChecklistLab';
 import SourceFreshnessMonitorLab from './SourceFreshnessMonitorLab';
+import SourceUpdateWorkflowLab from './SourceUpdateWorkflowLab';
 import VasIfrsBridgeLab from './VasIfrsBridgeLab';
 import { CheckCircle2, Copy, FileText, Megaphone, PackageCheck, ShieldCheck } from 'lucide-react';
 
@@ -26,7 +27,7 @@ type DeepResearchSection = 'overview' | 'knowledge' | 'data' | 'ml_learning' | '
 
 const sections: { id: DeepResearchSection; label: string; description: string }[] = [
   { id: 'overview', label: 'Overview', description: 'Bản đồ, navigator, quick start và glossary.' },
-  { id: 'knowledge', label: 'Knowledge', description: 'Gap matrix, VAS/IFRS/Tax bridge và kiểm soát nguồn.' },
+  { id: 'knowledge', label: 'Knowledge', description: 'Gap matrix, VAS/IFRS/Tax bridge, freshness monitor và workflow cập nhật nguồn.' },
   { id: 'data', label: 'Data Quality', description: 'Dataset mẫu, lineage và pipeline kiểm tra dữ liệu.' },
   { id: 'ml_learning', label: 'ML & Learning', description: 'Model card, rubric, case study và quiz.' },
   { id: 'governance', label: 'Governance', description: 'AI policy, roadmap, progress và feedback loop.' },
@@ -71,7 +72,7 @@ export default function ReleaseNotesGenerator() {
       </section>
 
       {activeSection === 'overview' && <div className="space-y-5"><DeepResearchReviewIndex /><DeepResearchModuleNavigator /><DeepResearchQuickStartGuide /><DeepResearchGlossaryLab /></div>}
-      {activeSection === 'knowledge' && <div className="space-y-5"><KnowledgeGapMatrix /><VasIfrsBridgeLab /><SourceFreshnessMonitorLab /><SourceCitationChecklistLab /></div>}
+      {activeSection === 'knowledge' && <div className="space-y-5"><KnowledgeGapMatrix /><VasIfrsBridgeLab /><SourceFreshnessMonitorLab /><SourceUpdateWorkflowLab /><SourceCitationChecklistLab /></div>}
       {activeSection === 'data' && <div className="space-y-5"><SampleDatasetExplorer /><DataLineageGovernanceLab /><DataQualityPipelineLab /></div>}
       {activeSection === 'ml_learning' && <div className="space-y-5"><ModelCardTemplateLab /><LearningOutcomeRubricLab /><CaseStudyScenarioLab /><LearningAssessmentQuizLab /></div>}
       {activeSection === 'governance' && <div className="space-y-5"><AIGovernancePolicyLab /><ProductMaturityRoadmapLab /><DeepResearchProgressTracker /><DeepResearchFeedbackLoopLab /></div>}
