@@ -13,6 +13,7 @@ import DeepResearchQuickStartGuide from './DeepResearchQuickStartGuide';
 import DeepResearchReviewIndex from './DeepResearchReviewIndex';
 import KnowledgeGapMatrix from './KnowledgeGapMatrix';
 import LearningAssessmentQuizLab from './LearningAssessmentQuizLab';
+import LearningOutcomeRubricLab from './LearningOutcomeRubricLab';
 import ModelCardTemplateLab from './ModelCardTemplateLab';
 import ProductMaturityRoadmapLab from './ProductMaturityRoadmapLab';
 import SampleDatasetExplorer from './SampleDatasetExplorer';
@@ -51,6 +52,7 @@ export default function ReleaseNotesGenerator() {
       <SampleDatasetExplorer />
       <DataLineageGovernanceLab />
       <ModelCardTemplateLab />
+      <LearningOutcomeRubricLab />
       <DeepResearchQuickStartGuide />
       <DeepResearchGlossaryLab />
       <DeepResearchProgressTracker />
