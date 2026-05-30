@@ -3,6 +3,7 @@ import AIGovernancePolicyLab from './AIGovernancePolicyLab';
 import BuildStatusChecker from './BuildStatusChecker';
 import CaseStudyScenarioLab from './CaseStudyScenarioLab';
 import CloudLaunchChecklist from './CloudLaunchChecklist';
+import DataLineageGovernanceLab from './DataLineageGovernanceLab';
 import DataQualityPipelineLab from './DataQualityPipelineLab';
 import DeepResearchFeedbackLoopLab from './DeepResearchFeedbackLoopLab';
 import DeepResearchGlossaryLab from './DeepResearchGlossaryLab';
@@ -48,6 +49,7 @@ export default function ReleaseNotesGenerator() {
       <DeepResearchModuleNavigator />
       <KnowledgeGapMatrix />
       <SampleDatasetExplorer />
+      <DataLineageGovernanceLab />
       <ModelCardTemplateLab />
       <DeepResearchQuickStartGuide />
       <DeepResearchGlossaryLab />
