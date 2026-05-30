@@ -6,6 +6,7 @@ import CloudLaunchChecklist from './CloudLaunchChecklist';
 import DataQualityPipelineLab from './DataQualityPipelineLab';
 import LearningAssessmentQuizLab from './LearningAssessmentQuizLab';
 import ProductMaturityRoadmapLab from './ProductMaturityRoadmapLab';
+import SourceCitationChecklistLab from './SourceCitationChecklistLab';
 import { CheckCircle2, Copy, FileText, Megaphone, PackageCheck, ShieldCheck } from 'lucide-react';
 
 export default function ReleaseNotesGenerator() {
@@ -45,6 +46,7 @@ export default function ReleaseNotesGenerator() {
       <LearningAssessmentQuizLab />
       <ProductMaturityRoadmapLab />
       <AIGovernancePolicyLab />
+      <SourceCitationChecklistLab />
       <CloudLaunchChecklist />
     </div>
   );
